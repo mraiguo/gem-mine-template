@@ -19,8 +19,7 @@ const config = {
       helper.loaders.less(),
       helper.loaders.sass(),
       helper.loaders.source()
-    ),
-    postLoaders: join(helper.loaders.exports(), helper.loaders.es3ify())
+    )
   },
   plugins: [
     helper.plugins.define('dev', {

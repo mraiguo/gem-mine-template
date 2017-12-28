@@ -10,15 +10,12 @@ const config = {
   resolve: {
     extensions: ['', '.js']
   },
-  module: {
-    postLoaders: [helper.loaders.es3ify()]
-  },
+  module: {},
   plugins: [
     helper.plugins.uglify(),
     function() {
       this.plugin('done', function() {
         const dist = path.resolve(BUILD, 'polyfill.js');
-        concat([path.resolve(PUBLIC, 'polyfill.js'), dist], dist);
         exec(`cp ${PUBLIC}/polyfill-promise.js ${BUILD}`);
         setFileVersion(dist);
       });

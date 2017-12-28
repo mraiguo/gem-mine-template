@@ -5,14 +5,13 @@ const cfg = require('../webpack');
 
 const config = {
   entry: {
-    vendor: ['react', 'react-dom', 'cat-eye'].concat(cfg.vendor)
+    vendor: ['react', 'react-dom', 'prop-types', 'cat-eye'].concat(cfg.vendor)
   },
   output: helper.output.lib(),
   resolve: helper.resolve(),
   resolveLoader: helper.resolveLoader(),
   module: {
-    loaders: [helper.loaders.babel()],
-    postLoaders: [helper.loaders.es3ify()]
+    loaders: [helper.loaders.babel()]
   },
   plugins: [
     helper.plugins.define('production'),
