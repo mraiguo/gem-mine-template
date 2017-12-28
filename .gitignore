@@ -18,3 +18,5 @@ coverage
 
 .DS_STORE
 ./manifest.json
+.idea
+.vscode
