@@ -1,0 +1,63 @@
+.title {
+  background: #7cb305;
+  height: 48px;
+  line-height: 48px;
+  color: #fff;
+  padding-left: 10px;
+  font-size: 32px;
+  font-weight: bold;
+}
+.body {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+.list {
+  li {
+    list-style-type: decimal;
+    border-bottom: 1px dashed #ddd;
+  }
+}
+
+.footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  height: 42px;
+
+  .goback {
+    position: absolute;
+    bottom: 5px;
+    right: 20px;
+    background-color: white;
+    color: black;
+    border: 1px solid #4caf50;
+    padding: 5px 7px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+  }
+}
+
+.hot {
+  color: #fa8c16;
+}
+
+.tip {
+  padding: 30px;
+  color: #999;
+}
+
+.btn {
+  background-color: #1890ff;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}

@@ -1,0 +1,26 @@
+.main {
+  position: relative;
+  width: 750px;
+  min-height: 250px;
+  font-size: 14px;
+  margin: 50px auto;
+  border: 1px solid #ddd;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1), 2px 2px 10px rgba(0, 0, 0, 0.1);
+
+  a:link,
+  a:visited {
+    color: #389e0d;
+    padding: 3px 10px;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  a:hover,
+  a:active {
+    color: #1890ff;
+  }
+}
+
+.center {
+  text-align: center;
+}
