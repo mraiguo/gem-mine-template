@@ -1,11 +1,31 @@
 .main {
+  padding-top: 50px;
   text-align: center;
+  font-size: 14px;
+
+  .logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  a:link,
+  a:visited {
+    color: #389e0d;
+    padding: 3px 10px;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  a:hover,
+  a:active {
+    color: #1890ff;
+  }
   h2 {
     color: #fa541c;
     font-size: 24px;
   }
   .examples {
     border-bottom: 1px dashed;
-    margin-top: 60px;
+    margin-top: 30px;
   }
 }

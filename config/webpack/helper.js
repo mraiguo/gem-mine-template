@@ -9,7 +9,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const StringReplacePlugin = require('string-replace-webpack-plugin');
 const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default;
 
 const config = require('../webpack');
@@ -211,18 +210,6 @@ const helper = {
           loader: 'file-loader'
         }
       ];
-    },
-    es3ify: function() {
-      return {
-        test: /\.jsx?$/,
-        loader: 'es3ify-loader'
-      };
-    },
-    exports: function() {
-      return {
-        test: /\.jsx?$/,
-        loader: 'export-from-ie8/loader'
-      };
     }
   },
 

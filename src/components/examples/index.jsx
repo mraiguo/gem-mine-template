@@ -6,7 +6,7 @@ import style from './style';
 
 export default props => {
   return (
-    <div>
+    <div className={style.container}>
       <Header />
       <div className={style.body}>
         <Routes path="examples" />
