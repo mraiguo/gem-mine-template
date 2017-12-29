@@ -54,7 +54,6 @@ const config = {
     helper.plugins.clean(),
     helper.plugins.dllReference(),
     helper.plugins.extractCss(),
-    helper.plugins.splitCss(),
     helper.plugins.uglify(true),
     helper.plugins.html(
       Object.assign(

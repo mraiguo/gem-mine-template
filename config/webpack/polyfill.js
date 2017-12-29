@@ -15,9 +15,7 @@ const config = {
     helper.plugins.uglify(),
     function() {
       this.plugin('done', function() {
-        const dist = path.resolve(BUILD, 'polyfill.js');
         exec(`cp ${PUBLIC}/polyfill-promise.js ${BUILD}`);
-        setFileVersion(dist);
       });
     }
   ]

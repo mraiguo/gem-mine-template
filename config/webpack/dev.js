@@ -5,7 +5,7 @@ const isHot = !!process.env.npm_config_hot;
 
 const config = {
   entry: {
-    polyfill: [path.resolve(PUBLIC, 'polyfill.js'), 'babel-polyfill'],
+    polyfill: ['babel-polyfill'],
     main: path.resolve(SRC, 'index.js')
   },
   output: helper.output.hash(),
@@ -27,7 +27,6 @@ const config = {
     }),
     helper.plugins.ignore(/vertx/),
     helper.plugins.extractCss(),
-    helper.plugins.splitCss(),
     helper.plugins.html()
   ],
   devServer: helper.devServer()

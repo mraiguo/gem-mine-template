@@ -1,3 +1,5 @@
+import 'global/util/fastclick';
+
 import React from 'react';
 import { render, Router } from 'cat-eye';
 import { importAll } from 'global/util/sys';

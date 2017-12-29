@@ -3,17 +3,13 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="description" content="">
+  <meta content="telephone=no" name="format-detection">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <% for(var index in htmlWebpackPlugin.files.chunks.main.css) {%>
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>" />
     <%}%>
 
       <% if ( htmlWebpackPlugin.options.vendor ) { %>
-        <!--[if lte IE 9]>
-    <script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"></script>
-    <![endif]-->
         <script>if (typeof Promise !== 'function') { document.write('<script src="./polyfill-promise.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
         <script src="./vendor.js?<%= htmlWebpackPlugin.options.vendor %>"></script>
         <% } else { %>
