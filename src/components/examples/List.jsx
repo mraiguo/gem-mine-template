@@ -17,13 +17,15 @@ export default props => {
       <li>
         <Link to={urlFor('examples.request')}>请求示例（CORS方式）</Link>
       </li>
-
       <li>
         <Link to={urlFor('examples.permission')}>权限拦截：计数器需要大于10才能访问</Link>
       </li>
       <li>
         <Link to={'/examples/not-found'}>404 page (子路由)</Link>
         <Link to={'/path/to/not-found'}>404 page (全局)</Link>
+      </li>
+      <li>
+        <Link to={urlFor('examples.ui')}>UI组件例子</Link>
       </li>
     </ul>
   );
