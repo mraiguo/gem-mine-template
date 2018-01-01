@@ -2,6 +2,7 @@ const path = require('path');
 const { helper, ROOT, PUBLIC, SRC, join } = require('./helper');
 
 const isHot = !!process.env.npm_config_hot;
+const shouldAnalyzer = !!process.env.npm_config_analyzer;
 
 const config = {
   entry: {
@@ -34,6 +35,9 @@ const config = {
 
 if (isHot) {
   config.plugins.push(helper.plugins.hot());
+}
+if (shouldAnalyzer) {
+  config.plugins.push(helper.plugins.analyzer());
 }
 
 const devServer = helper.devServer();
