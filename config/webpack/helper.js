@@ -222,7 +222,8 @@ const helper = {
         config: CONFIG,
         components: path.resolve(SRC, 'components'),
         styles: path.resolve(SRC, 'styles'),
-        global: path.resolve(SRC, 'global')
+        global: path.resolve(SRC, 'global'),
+        fish: '@sdp.nd/fish'
       }
     };
     if (params.extensions) {
