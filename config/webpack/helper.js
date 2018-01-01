@@ -9,7 +9,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const config = require('../webpack');
 let proxy;
@@ -358,6 +358,9 @@ const helper = {
       return new ExtractTextPlugin('[name].[contenthash].css', {
         allChunks: true
       });
+    },
+    analyzer: function() {
+      return new BundleAnalyzerPlugin();
     }
   },
   devServer: function(params = {}) {
