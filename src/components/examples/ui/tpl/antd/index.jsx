@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Tooltip, Select, Button, DatePicker, message } from 'fish';
+import { Form, Input, Tooltip, Select, Button, DatePicker, message } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
