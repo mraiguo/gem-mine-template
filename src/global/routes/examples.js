@@ -7,6 +7,7 @@ import X from 'components/examples/permission/X';
 import Y from 'components/examples/permission/Y';
 import Request from 'components/examples/request';
 import Params from 'components/examples/params';
+import UI from 'components/examples/ui';
 
 export default {
   path: '/examples',
@@ -56,6 +57,11 @@ export default {
           component: Y
         }
       }
+    },
+    ui: {
+      path: '/ui',
+      description: 'UI 组件库示例',
+      component: UI
     }
   }
 };
