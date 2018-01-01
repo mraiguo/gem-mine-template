@@ -17,16 +17,16 @@
 .body {
   padding: 10px 20px;
   margin-bottom: 20px;
-  a:link,
-  a:visited {
+  .link:link,
+  .link:visited {
     color: #389e0d;
     padding: 3px 10px;
     text-decoration: none;
     display: inline-block;
   }
 
-  a:hover,
-  a:active {
+  .link:hover,
+  .link:active {
     color: #1890ff;
   }
 }
