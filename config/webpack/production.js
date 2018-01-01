@@ -6,6 +6,7 @@ let version;
 const versionFile = path.resolve(BUILD, 'version.json');
 const buildVendor = !!process.env.npm_config_vendor;
 const buildPolyfill = !!process.env.npm_config_polyfill;
+const shouldAnalyzer = !!process.env.npm_config_analyzer;
 
 if (buildVendor || buildPolyfill) {
   if (buildVendor && buildPolyfill) {
@@ -67,5 +68,9 @@ const config = {
     )
   )
 };
+
+if (shouldAnalyzer) {
+  config.plugins.push(helper.plugins.analyzer());
+}
 
 module.exports = config;
