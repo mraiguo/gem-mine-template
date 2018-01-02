@@ -1,5 +1,5 @@
 import ce, { request } from 'cat-eye';
-const { example } = request;
+const { api } = request;
 
 ce.model({
   name: 'example',
