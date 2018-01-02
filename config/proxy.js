@@ -8,7 +8,7 @@
  */
 
 const config = {
-  api: {
+  example: {
     mode: 'cors',
     wds: {
       prefix: '/v1.0',

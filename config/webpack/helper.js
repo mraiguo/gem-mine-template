@@ -394,7 +394,6 @@ const helper = {
       const wds = item.wds;
       if (wds) {
         const prefix = `/${key}_wds`;
-        console.log(prefix, wds);
         obj.proxy[prefix] = {
           target: wds.url,
           changeOrigin: true,
