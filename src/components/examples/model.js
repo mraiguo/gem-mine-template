@@ -15,7 +15,7 @@ ce.model({
   },
   effects: {
     corsGet() {
-      api
+      example
         .get('/mock', {
           params: {
             q: 'hello'
@@ -28,7 +28,7 @@ ce.model({
         });
     },
     corsPost() {
-      api
+      example
         .post('/mock', {
           data: {
             name: 'tom'
