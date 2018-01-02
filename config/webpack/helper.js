@@ -22,7 +22,7 @@ try {
 const ROOT = path.resolve(__dirname, '../../');
 const NODE_MODULES = path.resolve(ROOT, 'node_modules');
 const SRC = path.resolve(ROOT, 'src');
-const BUILD = path.resolve(ROOT, 'build');
+const BUILD = config.buildPath || path.resolve(ROOT, 'build');
 const PUBLIC = path.resolve(ROOT, 'public');
 const CONFIG = path.resolve(ROOT, 'config');
 const STYLE = path.resolve(SRC, 'styles');
