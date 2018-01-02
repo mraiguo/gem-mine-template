@@ -4,8 +4,8 @@
  * 2. 会往 request 对象中注入对应的方法，例如
  *    import {request} from 'cat-eye';
  *    const {example} = request;
- *    api.get/post ...
- *    这里的 api 就是一个包装过的 axios 对象
+ *    example.get/post ...
+ *    这里的 example 就是一个包装过的 axios 对象
  */
 
 const config = {
