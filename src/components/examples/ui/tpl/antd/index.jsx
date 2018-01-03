@@ -22,12 +22,6 @@ class UiForm extends Component {
       wrapperCol: { span: 20 }
     }
 
-    <FormItem {...formItemLayout}>
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
-    </FormItem>
-
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormItem {...formItemLayout} label="邮箱">
