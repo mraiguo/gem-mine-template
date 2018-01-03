@@ -1,5 +1,5 @@
-import React from 'react';
+import React from 'react'
 
 export default props => {
-  return <div>尚未实现</div>;
-};
+  return <div>尚未实现</div>
+}

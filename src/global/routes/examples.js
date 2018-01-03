@@ -1,13 +1,12 @@
-import React from 'react';
-import Container from 'components/examples';
-import List from 'components/examples/List';
-import Constant from 'components/examples/constant';
-import Counter from 'components/examples/counter';
-import X from 'components/examples/permission/X';
-import Y from 'components/examples/permission/Y';
-import Request from 'components/examples/request';
-import Params from 'components/examples/params';
-import UI from 'components/examples/ui';
+import Container from 'components/examples'
+import List from 'components/examples/List'
+import Constant from 'components/examples/constant'
+import Counter from 'components/examples/counter'
+import X from 'components/examples/permission/X'
+import Y from 'components/examples/permission/Y'
+import Request from 'components/examples/request'
+import Params from 'components/examples/params'
+import UI from 'components/examples/ui'
 
 export default {
   path: '/examples',
@@ -42,8 +41,8 @@ export default {
     },
     permission: {
       path: '/permission',
-      permission: function(props) {
-        return props.example.count > 10;
+      permission: function (props) {
+        return props.example.count > 10
       },
       redirect: 'examples.permission.y',
       description: '权限拦截例子',
@@ -64,4 +63,4 @@ export default {
       component: UI
     }
   }
-};
+}

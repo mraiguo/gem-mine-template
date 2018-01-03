@@ -1,8 +1,8 @@
-const path = require('path');
-const { helper, ROOT, PUBLIC, SRC, join } = require('./helper');
+const path = require('path')
+const { helper, SRC, join } = require('./helper')
 
-const isHot = !!process.env.npm_config_hot;
-const shouldAnalyzer = !!process.env.npm_config_analyzer;
+const isHot = !!process.env.npm_config_hot
+const shouldAnalyzer = !!process.env.npm_config_analyzer
 
 const config = {
   entry: {
@@ -31,17 +31,17 @@ const config = {
     helper.plugins.html()
   ],
   devServer: helper.devServer()
-};
+}
 
 if (isHot) {
-  config.plugins.push(helper.plugins.hot());
+  config.plugins.push(helper.plugins.hot())
 }
 if (shouldAnalyzer) {
-  config.plugins.push(helper.plugins.analyzer());
+  config.plugins.push(helper.plugins.analyzer())
 }
 
-const devServer = helper.devServer();
-config.plugins.push(helper.plugins.browser(`http://${devServer.host}:${devServer.port}`));
-config.devServer = devServer;
+const devServer = helper.devServer()
+config.plugins.push(helper.plugins.browser(`http://${devServer.host}:${devServer.port}`))
+config.devServer = devServer
 
-module.exports = config;
+module.exports = config

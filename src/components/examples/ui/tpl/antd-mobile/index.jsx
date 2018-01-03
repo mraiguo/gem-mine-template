@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import { List, DatePicker, Button, InputItem, Toast } from 'antd-mobile';
-import { createForm } from 'rc-form';
+import React, { Component } from 'react'
+import { List, DatePicker, Button, InputItem, Toast } from 'antd-mobile'
+import { createForm } from 'rc-form'
 
 class Cmp extends Component {
   onSubmit = () => {
     this.props.form.validateFields({ force: true }, error => {
       if (!error) {
-        const data = this.props.form.getFieldsValue();
-        data.date = parseInt(data.date.getTime() / 1000, 10);
-        Toast.success(JSON.stringify(data));
+        const data = this.props.form.getFieldsValue()
+        data.date = parseInt(data.date.getTime() / 1000, 10)
+        Toast.success(JSON.stringify(data))
       } else {
-        Toast.fail('数据不完整', 3);
+        Toast.fail('数据不完整', 3)
       }
-    });
-  };
+    })
+  }
   render() {
-    const { getFieldProps, getFieldError } = this.props.form;
+    const { getFieldProps, getFieldError } = this.props.form
 
     return (
       <form>
@@ -54,7 +54,7 @@ class Cmp extends Component {
           </List.Item>
         </List>
       </form>
-    );
+    )
   }
 }
-export default createForm()(Cmp);
+export default createForm()(Cmp)

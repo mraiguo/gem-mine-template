@@ -1,5 +1,5 @@
-import React from 'react';
-import { actions } from 'cat-eye';
+import React from 'react'
+import { actions } from 'cat-eye'
 
 export default props => {
   return (
@@ -9,5 +9,5 @@ export default props => {
         ❮ 返回
       </a>
     </div>
-  );
-};
+  )
+}

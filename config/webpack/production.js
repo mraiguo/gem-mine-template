@@ -1,34 +1,33 @@
-const path = require('path');
-const fs = require('fs');
-const webpack = require('webpack');
-const { SRC, BUILD, helper, exec, join } = require('./helper');
-let version;
-const versionFile = path.resolve(BUILD, 'version.json');
-const buildVendor = !!process.env.npm_config_vendor;
-const buildPolyfill = !!process.env.npm_config_polyfill;
-const shouldAnalyzer = !!process.env.npm_config_analyzer;
+const path = require('path')
+const fs = require('fs')
+const { SRC, BUILD, helper, exec, join } = require('./helper')
+let version
+const versionFile = path.resolve(BUILD, 'version.json')
+const buildVendor = !!process.env.npm_config_vendor
+const buildPolyfill = !!process.env.npm_config_polyfill
+const shouldAnalyzer = !!process.env.npm_config_analyzer
 
 if (buildVendor || buildPolyfill) {
   if (buildVendor && buildPolyfill) {
-    console.log('> build polyfill && vendor');
-    exec('npm run polyfill && npm run vendor');
+    console.log('> build polyfill && vendor')
+    exec('npm run polyfill && npm run vendor')
   } else {
     if (buildPolyfill) {
-      console.log('> build polyfill');
-      exec('npm run polyfill');
+      console.log('> build polyfill')
+      exec('npm run polyfill')
     } else {
-      console.log('> build vendor');
-      exec('npm run vendor');
+      console.log('> build vendor')
+      exec('npm run vendor')
     }
   }
-  version = JSON.parse(fs.readFileSync(versionFile).toString());
+  version = JSON.parse(fs.readFileSync(versionFile).toString())
 } else {
   try {
-    version = require(versionFile);
+    version = require(versionFile)
   } catch (e) {
-    console.warn('> polyfill and vendor not generate, will auto run npm run polyfill/vendor');
-    exec('npm run polyfill && npm run vendor');
-    version = JSON.parse(fs.readFileSync(versionFile).toString());
+    console.warn('> polyfill and vendor not generate, will auto run npm run polyfill/vendor')
+    exec('npm run polyfill && npm run vendor')
+    version = JSON.parse(fs.readFileSync(versionFile).toString())
   }
 }
 
@@ -65,10 +64,10 @@ const config = {
       )
     )
   )
-};
-
-if (shouldAnalyzer) {
-  config.plugins.push(helper.plugins.analyzer());
 }
 
-module.exports = config;
+if (shouldAnalyzer) {
+  config.plugins.push(helper.plugins.analyzer())
+}
+
+module.exports = config

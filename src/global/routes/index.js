@@ -1,14 +1,13 @@
-import React from 'react';
-import { router, getIn, Redirect } from 'cat-eye';
+import { router } from 'cat-eye'
 
 // 组件引入
-import NotFound from 'components/common/Exception/404';
-import Forbidden from 'components/common/Exception/403';
+import NotFound from 'components/common/Exception/404'
+import Forbidden from 'components/common/Exception/403'
 
-import Home from 'components/home';
+import Home from 'components/home'
 
 // 路由引入
-import examplesRoutes from './examples';
+import examplesRoutes from './examples'
 
 /**
  * 路由配置，包括：
@@ -19,13 +18,13 @@ router.config({
   mapStateToProps: state => {
     return {
       example: state.example
-    };
+    }
   },
   components: {
     NotFound,
     Forbidden
   }
-});
+})
 
 /**
  * 路由注册
@@ -44,4 +43,4 @@ router.register({
     index: true
   },
   examples: examplesRoutes
-});
+})

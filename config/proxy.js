@@ -20,6 +20,6 @@ const config = {
       url: 'http://cors.zmei.me'
     }
   }
-};
+}
 
-module.exports = config;
+module.exports = config

@@ -1,7 +1,6 @@
-const path = require('path');
-const fs = require('fs');
-const { helper, BUILD, setFileVersion } = require('./helper');
-const cfg = require('../webpack');
+const path = require('path')
+const { helper, BUILD, setFileVersion } = require('./helper')
+const cfg = require('../webpack')
 
 const config = {
   entry: {
@@ -17,13 +16,13 @@ const config = {
     helper.plugins.define('production'),
     helper.plugins.dll(),
     helper.plugins.uglify(),
-    function() {
-      this.plugin('done', function() {
-        const dist = path.resolve(BUILD, 'vendor.js');
-        setFileVersion(dist);
-      });
+    function () {
+      this.plugin('done', function () {
+        const dist = path.resolve(BUILD, 'vendor.js')
+        setFileVersion(dist)
+      })
     }
   ]
-};
+}
 
-module.exports = config;
+module.exports = config
