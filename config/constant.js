@@ -1,3 +1,4 @@
+/* global ENV */
 /**
  * 系统全局常量
  */
@@ -18,10 +19,10 @@ const data = {
   production: {
     NAME: 'lucy'
   }
-};
+}
 
 // 默认使用 local
-const result = Object.assign({}, data[ENV || 'local']);
+const result = Object.assign({}, data[ENV || 'local'])
 Object.keys(result).forEach(key => {
-  exports[key] = result[key];
-});
+  exports[key] = result[key]
+})

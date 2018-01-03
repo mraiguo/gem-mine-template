@@ -1,7 +1,7 @@
-import React from 'react';
-import { urlFor, Link } from 'cat-eye';
-import style from './style';
-import logo from './logo.png';
+import React from 'react'
+import { urlFor, Link } from 'cat-eye'
+import style from './style'
+import logo from './logo.png'
 
 export default props => {
   return (
@@ -15,5 +15,5 @@ export default props => {
         这里有一些简单的例子 go!
       </Link>
     </div>
-  );
-};
+  )
+}

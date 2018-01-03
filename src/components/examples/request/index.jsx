@@ -1,6 +1,6 @@
-import React from 'react';
-import { actions, getIn, smart } from 'cat-eye';
-import style from './style';
+import React from 'react'
+import { actions, getIn, smart } from 'cat-eye'
+import style from './style'
 
 const Cmp = props => {
   return (
@@ -23,11 +23,11 @@ const Cmp = props => {
         <p>tip 3: nginx反向代理 和 服务端代理需要服务端配合，请参看文档处理</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default smart(state => {
   return {
     data: getIn(state, 'example.data')
-  };
-})(Cmp);
+  }
+})(Cmp)

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Routes } from 'cat-eye';
-import Footer from './Footer';
-import Header from './Header';
-import style from './style';
+import React from 'react'
+import { Routes } from 'cat-eye'
+import Footer from './Footer'
+import Header from './Header'
+import style from './style'
 
 export default props => {
   return (
@@ -13,5 +13,5 @@ export default props => {
       </div>
       <Footer />
     </div>
-  );
-};
+  )
+}

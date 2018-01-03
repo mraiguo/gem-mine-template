@@ -1,5 +1,5 @@
-import ce, { request } from 'cat-eye';
-const { example } = request;
+import ce, { request } from 'cat-eye'
+const { example } = request
 
 ce.model({
   name: 'example',
@@ -10,7 +10,7 @@ ce.model({
     change(n) {
       return this.setField({
         count: prev => prev + n
-      });
+      })
     }
   },
   effects: {
@@ -24,8 +24,8 @@ ce.model({
         .then(data => {
           this.setField({
             data
-          });
-        });
+          })
+        })
     },
     corsPost() {
       example
@@ -35,8 +35,8 @@ ce.model({
           }
         })
         .then(data => {
-          this.setField({ data });
-        });
+          this.setField({ data })
+        })
     }
   }
-});
+})

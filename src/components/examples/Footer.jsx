@@ -1,6 +1,6 @@
-import React from 'react';
-import { actions } from 'cat-eye';
-import style from './style';
+import React from 'react'
+import { actions } from 'cat-eye'
+import style from './style'
 export default props => {
   return (
     <div className={style.footer}>
@@ -8,5 +8,5 @@ export default props => {
         ❮ 返回
       </a>
     </div>
-  );
-};
+  )
+}
