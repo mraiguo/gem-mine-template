@@ -1,6 +1,6 @@
-import React from 'react';
-import { urlFor, Link } from 'cat-eye';
-import style from '../style';
+import React from 'react'
+import { urlFor, Link } from 'cat-eye'
+import style from '../style'
 
 export default props => {
   return (
@@ -10,5 +10,5 @@ export default props => {
         goto page X
       </Link>
     </div>
-  );
-};
+  )
+}

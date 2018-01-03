@@ -1,6 +1,5 @@
-const path = require('path');
-const fs = require('fs');
-const { helper, concat, exec, BUILD, PUBLIC, setFileVersion } = require('./helper');
+const path = require('path')
+const { helper, concat, exec, BUILD, PUBLIC, setFileVersion } = require('./helper')
 
 const config = {
   entry: {
@@ -15,15 +14,15 @@ const config = {
   },
   plugins: [
     helper.plugins.uglify(),
-    function() {
-      this.plugin('done', function() {
-        const dist = path.resolve(BUILD, 'polyfill.js');
-        concat([path.resolve(PUBLIC, 'polyfill.js'), dist], dist);
-        exec(`cp ${PUBLIC}/polyfill-promise.js ${BUILD}`);
-        setFileVersion(dist);
-      });
+    function () {
+      this.plugin('done', function () {
+        const dist = path.resolve(BUILD, 'polyfill.js')
+        concat([path.resolve(PUBLIC, 'polyfill.js'), dist], dist)
+        exec(`cp ${PUBLIC}/polyfill-promise.js ${BUILD}`)
+        setFileVersion(dist)
+      })
     }
   ]
-};
+}
 
-module.exports = config;
+module.exports = config

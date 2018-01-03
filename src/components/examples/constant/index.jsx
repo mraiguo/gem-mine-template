@@ -1,6 +1,7 @@
-import React from 'react';
-import { NAME } from 'config/constant';
-import style from '../style';
+/* global ENV */
+import React from 'react'
+import { NAME } from 'config/constant'
+import style from '../style'
 
 export default props => {
   return (
@@ -15,5 +16,5 @@ export default props => {
         地址等功能
       </div>
     </div>
-  );
-};
+  )
+}

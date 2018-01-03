@@ -1,6 +1,6 @@
-import React from 'react';
-import { actions, smart } from 'cat-eye';
-import style from './style';
+import React from 'react'
+import { actions, smart } from 'cat-eye'
+import style from './style'
 
 const Counter = props => {
   return (
@@ -15,22 +15,22 @@ const Counter = props => {
         </button>
       </section>
     </div>
-  );
-};
+  )
+}
 export default smart(
   state => {
     return {
       count: state.example.count
-    };
+    }
   },
   props => {
     return {
       increment() {
-        actions.example.change(1);
+        actions.example.change(1)
       },
       decrement() {
-        actions.example.change(-1);
+        actions.example.change(-1)
       }
-    };
+    }
   }
-)(Counter);
+)(Counter)

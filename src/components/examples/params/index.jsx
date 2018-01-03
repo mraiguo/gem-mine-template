@@ -1,9 +1,9 @@
-import React from 'react';
-import { queryString } from 'cat-eye';
-import style from '../style';
+import React from 'react'
+import { queryString } from 'cat-eye'
+import style from '../style'
 
 export default props => {
-  const { name } = queryString.parse(props.location.search);
+  const { name } = queryString.parse(props.location.search)
   return (
     <div>
       hello, <span className={style.hot}>{name}</span>, your id:{' '}
@@ -13,5 +13,5 @@ export default props => {
         传参：urlFor('examples.params', {'{'}id: 233, name: 'robot'{'}'})
       </p>
     </div>
-  );
-};
+  )
+}

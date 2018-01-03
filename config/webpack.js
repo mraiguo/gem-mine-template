@@ -1,10 +1,10 @@
 // 生成页面的 title
-exports.title = `gem-mine's world`;
+exports.title = `gem-mine's world`
 
 // 别名配置
 exports.resolve = {
   alias: {}
-};
+}
 
 // 编译目录配置
 // exports.buildPath = path.resolve(__dirname, '../build');
@@ -13,7 +13,7 @@ exports.resolve = {
 // exports.publicPath = './';
 
 // 加入 vendor 公共包的库
-exports.vendor = [];
+exports.vendor = []
 
 // webpack dev server 默认端口，也可以通过命令行来指定 --port=9000，默认9000
 // exports.port = 9000;

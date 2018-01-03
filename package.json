@@ -1,13 +1,14 @@
 {
   "name": "project_name",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "dependencies": {
     "cat-eye": "^0.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.1.2",
     "babel-loader": "^6.4.1",
     "babel-plugin-import": "^1.6.2",
     "babel-plugin-transform-object-assign": "^6.22.0",
@@ -22,6 +23,14 @@
     "css-loader": "^0.28.7",
     "css-split-webpack-plugin": "^0.2.5",
     "es3ify-loader": "^0.2.0",
+    "eslint": "^4.14.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-config-standard-react": "^5.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-react": "^7.5.1",
+    "eslint-plugin-standard": "^3.0.1",
     "export-from-ie8": "^1.0.5",
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "^1.1.5",
@@ -43,6 +52,7 @@
     "start": "cross-env MODE=dev webpack-dev-server",
     "build": "cross-env MODE=production webpack",
     "vendor": "cross-env MODE=vendor webpack",
-    "polyfill": "cross-env MODE=polyfill webpack"
+    "polyfill": "cross-env MODE=polyfill webpack",
+    "lint": "eslint --ext .js config src"
   }
 }
