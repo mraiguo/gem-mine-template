@@ -55,11 +55,11 @@ function exec(cmd) {
 }
 
 function concat(sources, dist) {
-  var dir = path.dirname(dist)
+  const dir = path.dirname(dist)
   exec(util.format('mkdir -p %s', dir))
 
-  var firstFile = sources.shift()
-  var content = fs.readFileSync(firstFile).toString()
+  const firstFile = sources.shift()
+  let content = fs.readFileSync(firstFile).toString()
   fs.writeFileSync(dist, content.replace(/<\/script>/g, '<\\x3cscript>'))
   sources.forEach(function (src) {
     content = fs.readFileSync(src).toString()
@@ -68,10 +68,10 @@ function concat(sources, dist) {
 }
 
 function getFileMD5(path) {
-  var str = fs.readFileSync(path, 'utf-8')
-  var md5um = crypto.createHash('md5')
+  const str = fs.readFileSync(path, 'utf-8')
+  const md5um = crypto.createHash('md5')
   md5um.update(str)
-  var md5 = md5um.digest('hex')
+  const md5 = md5um.digest('hex')
   return md5
 }
 

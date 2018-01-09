@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
-const { helper, concat, exec, BUILD, PUBLIC, setFileVersion } = require('./helper')
+const { helper, concat, BUILD, PUBLIC, setFileVersion } = require('./helper')
 
 const config = {
   entry: {

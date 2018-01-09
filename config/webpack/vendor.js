@@ -1,6 +1,5 @@
 const path = require('path')
-const fs = require('fs-extra')
-const { helper, PUBLIC, BUILD, setFileVersion } = require('./helper')
+const { helper, BUILD, setFileVersion } = require('./helper')
 const cfg = require('../webpack')
 
 const config = {
