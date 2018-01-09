@@ -18,18 +18,10 @@ const config = {
     helper.plugins.define('production'),
     helper.plugins.dll(),
     helper.plugins.uglify(),
-    function () {
-      this.plugin('done', function () {
-        const dist = path.resolve(BUILD, 'vendor.js')
-        setFileVersion(dist)
-
-        if (cfg.additional) {
-          cfg.additional.forEach(function (name) {
-            fs.copySync(`${PUBLIC}/${name}`, `${BUILD}/${name}`)
-          })
-        }
-      })
-    }
+    helper.plugins.done(function () {
+      const dist = path.resolve(BUILD, 'vendor.js')
+      setFileVersion(dist)
+    })
   ]
 }
 

@@ -28,3 +28,6 @@ exports.plugins = []
 // 只需要写文件文件名即可，会在 vendor 构造时进行拷贝
 // 引用请自行修改 public/index.html 进行处理
 exports.additional = []
+
+// webpack 处理完毕后的回调处理
+exports.done = function () {}

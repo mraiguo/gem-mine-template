@@ -1,6 +1,6 @@
 const path = require('path')
 const util = require('util')
-const fs = require('fs')
+const fs = require('fs-extra')
 const crypto = require('crypto')
 const execSync = require('child_process').execSync
 
@@ -11,6 +11,7 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const DonePlugin = require('./plugins/done')
 
 const config = require('../webpack')
 let proxy
@@ -383,6 +384,18 @@ const helper = {
     },
     analyzer: function () {
       return new BundleAnalyzerPlugin()
+    },
+    done: function () {
+      return new DonePlugin(function () {
+        if (config.additional) {
+          config.additional.forEach(function (name) {
+            fs.copySync(`${PUBLIC}/${name}`, `${BUILD}/${name}`)
+          })
+        }
+        if (config.done) {
+          config.done(exports, config)
+        }
+      })
     }
   },
   devServer: function (params = {}) {

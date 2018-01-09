@@ -36,7 +36,8 @@ const config = {
     helper.plugins.splitCss(),
     helper.plugins.html(),
 
-    custom.plugins
+    custom.plugins,
+    helper.plugins.done()
   ),
   devServer: helper.devServer(),
   postcss: helper.postcss,

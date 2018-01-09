@@ -68,7 +68,8 @@ const config = {
         version
       )
     ),
-    custom.plugins
+    custom.plugins,
+    helper.plugins.done()
   ),
   postcss: helper.postcss,
   stats: { chunks: false, children: false }
