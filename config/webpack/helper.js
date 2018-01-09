@@ -47,6 +47,8 @@ if (MODE === 'dev') {
 const isHot = !!process.env.npm_config_hot
 const port = process.env.npm_config_port || config.port || 9000
 
+const BROWSER = ['last 2 versions', 'ie >= 8']
+
 function exec(cmd) {
   execSync(cmd, {}).toString()
 }
@@ -147,7 +149,7 @@ const helper = {
           exclude: files,
           loader: ExtractTextPlugin.extract(
             'style-loader',
-            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]',
+            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]!postcss-loader',
             SOURCE_IN_CSS_PUBLIC_PATH
           )
         },
@@ -221,7 +223,14 @@ const helper = {
     exports: function () {
       return {
         test: /\.jsx?$/,
+        exclude: NODE_MODULES,
         loader: 'export-from-ie8/loader'
+      }
+    },
+    json: function () {
+      return {
+        test: /\.json$/,
+        loader: 'json-loader'
       }
     }
   },
@@ -381,7 +390,10 @@ const helper = {
       contentBase: BUILD,
       host: process.platform === 'win32' ? '127.0.0.1' : '0.0.0.0',
       port: port,
-      stats: { chunks: false },
+      stats: {
+        chunks: false,
+        children: false
+      },
       proxy: {}
     }
     if (isHot) {
@@ -403,6 +415,12 @@ const helper = {
       }
     })
     return Object.assign(obj, params)
+  },
+  postcss: function () {
+    return [
+      require('postcss-import')({ addDependencyTo: webpack }),
+      require('postcss-cssnext')({ autoprefixer: { browsers: BROWSER } })
+    ]
   }
 }
 

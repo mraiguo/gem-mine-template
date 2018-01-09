@@ -1,5 +1,6 @@
 const path = require('path')
-const { helper, BUILD, setFileVersion } = require('./helper')
+const fs = require('fs-extra')
+const { helper, PUBLIC, BUILD, setFileVersion } = require('./helper')
 const cfg = require('../webpack')
 
 const config = {
@@ -21,6 +22,12 @@ const config = {
       this.plugin('done', function () {
         const dist = path.resolve(BUILD, 'vendor.js')
         setFileVersion(dist)
+
+        if (cfg.additional) {
+          cfg.additional.forEach(function (name) {
+            fs.copySync(`${PUBLIC}/${name}`, `${BUILD}/${name}`)
+          })
+        }
       })
     }
   ]

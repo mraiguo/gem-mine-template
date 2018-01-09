@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs-extra')
 const { helper, concat, exec, BUILD, PUBLIC, setFileVersion } = require('./helper')
 
 const config = {
@@ -18,7 +19,7 @@ const config = {
       this.plugin('done', function () {
         const dist = path.resolve(BUILD, 'polyfill.js')
         concat([path.resolve(PUBLIC, 'polyfill.js'), dist], dist)
-        exec(`cp ${PUBLIC}/polyfill-promise.js ${BUILD}`)
+        fs.copySync(`${PUBLIC}/polyfill-promise.js`, `${BUILD}/polyfill-promise.js`)
         setFileVersion(dist)
       })
     }
