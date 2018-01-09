@@ -1,5 +1,5 @@
 import React from 'react'
-import { smart, actions, withRouter, Routes } from 'cat-eye'
+import { smart, withRouter, Routes } from 'cat-eye'
 import 'styles/app'
 
 const App = props => {

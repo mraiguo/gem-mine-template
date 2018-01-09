@@ -6,6 +6,7 @@ const versionFile = path.resolve(BUILD, 'version.json')
 const buildVendor = !!process.env.npm_config_vendor
 const buildPolyfill = !!process.env.npm_config_polyfill
 const shouldAnalyzer = !!process.env.npm_config_analyzer
+const custom = require('../webpack')
 
 if (buildVendor || buildPolyfill) {
   if (buildVendor && buildPolyfill) {
@@ -44,7 +45,9 @@ const config = {
       helper.loaders.css(),
       helper.loaders.less(),
       helper.loaders.sass(),
-      helper.loaders.source()
+      helper.loaders.json(),
+      helper.loaders.source(),
+      custom.loaders
     )
   },
   plugins: join(
@@ -62,8 +65,12 @@ const config = {
         },
         version
       )
-    )
-  )
+    ),
+    custom.plugins,
+    helper.plugins.done()
+  ),
+  postcss: helper.postcss,
+  stats: { chunks: false, children: false }
 }
 
 if (shouldAnalyzer) {

@@ -1,4 +1,5 @@
-const { helper, exec, BUILD, PUBLIC } = require('./helper')
+const fs = require('fs-extra')
+const { helper, BUILD, PUBLIC } = require('./helper')
 
 const config = {
   entry: {
@@ -13,7 +14,7 @@ const config = {
     helper.plugins.uglify(),
     function () {
       this.plugin('done', function () {
-        exec(`cp ${PUBLIC}/polyfill-promise.js ${BUILD}`)
+        fs.copySync(`${PUBLIC}/polyfill-promise.js`, `${BUILD}/polyfill-promise.js`)
       })
     }
   ]

@@ -16,12 +16,10 @@ const config = {
     helper.plugins.define('production'),
     helper.plugins.dll(),
     helper.plugins.uglify(),
-    function () {
-      this.plugin('done', function () {
-        const dist = path.resolve(BUILD, 'vendor.js')
-        setFileVersion(dist)
-      })
-    }
+    helper.plugins.done(function () {
+      const dist = path.resolve(BUILD, 'vendor.js')
+      setFileVersion(dist)
+    })
   ]
 }
 

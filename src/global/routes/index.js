@@ -1,8 +1,8 @@
 import { router } from 'cat-eye'
 
 // 组件引入
-import NotFound from 'components/common/Exception/404'
-import Forbidden from 'components/common/Exception/403'
+import NotFound from 'components/common/exception/404'
+import Forbidden from 'components/common/exception/403'
 
 import Home from 'components/home'
 
