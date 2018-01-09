@@ -372,8 +372,11 @@ const helper = {
     analyzer: function () {
       return new BundleAnalyzerPlugin()
     },
-    done: function () {
+    done: function (callback) {
       return new DonePlugin(function () {
+        if (callback) {
+          callback(exports, config)
+        }
         if (config.additional) {
           config.additional.forEach(function (name) {
             fs.copySync(`${PUBLIC}/${name}`, `${BUILD}/${name}`)

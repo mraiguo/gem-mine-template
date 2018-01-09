@@ -12,11 +12,9 @@ const config = {
   module: {},
   plugins: [
     helper.plugins.uglify(),
-    function () {
-      this.plugin('done', function () {
-        fs.copySync(`${PUBLIC}/polyfill-promise.js`, `${BUILD}/polyfill-promise.js`)
-      })
-    }
+    helper.plugins.done(function () {
+      fs.copySync(`${PUBLIC}/polyfill-promise.js`, `${BUILD}/polyfill-promise.js`)
+    })
   ]
 }
 
