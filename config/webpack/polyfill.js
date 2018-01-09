@@ -15,14 +15,12 @@ const config = {
   },
   plugins: [
     helper.plugins.uglify(),
-    function () {
-      this.plugin('done', function () {
-        const dist = path.resolve(BUILD, 'polyfill.js')
-        concat([path.resolve(PUBLIC, 'polyfill.js'), dist], dist)
-        fs.copySync(`${PUBLIC}/polyfill-promise.js`, `${BUILD}/polyfill-promise.js`)
-        setFileVersion(dist)
-      })
-    }
+    helper.plugins.done(function () {
+      const dist = path.resolve(BUILD, 'polyfill.js')
+      concat([path.resolve(PUBLIC, 'polyfill.js'), dist], dist)
+      fs.copySync(`${PUBLIC}/polyfill-promise.js`, `${BUILD}/polyfill-promise.js`)
+      setFileVersion(dist)
+    })
   ]
 }
 
