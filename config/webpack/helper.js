@@ -1,6 +1,6 @@
 const path = require('path')
 const util = require('util')
-const fs = require('fs')
+const fs = require('fs-extra')
 const crypto = require('crypto')
 const execSync = require('child_process').execSync
 
@@ -11,6 +11,7 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const DonePlugin = require('./plugins/done')
 
 const config = require('../webpack')
 let proxy
@@ -47,16 +48,18 @@ if (MODE === 'dev') {
 const isHot = !!process.env.npm_config_hot
 const port = process.env.npm_config_port || config.port || 9000
 
+const BROWSER = ['last 2 versions', 'ie >= 8']
+
 function exec(cmd) {
   execSync(cmd, {}).toString()
 }
 
 function concat(sources, dist) {
-  var dir = path.dirname(dist)
+  const dir = path.dirname(dist)
   exec(util.format('mkdir -p %s', dir))
 
-  var firstFile = sources.shift()
-  var content = fs.readFileSync(firstFile).toString()
+  const firstFile = sources.shift()
+  let content = fs.readFileSync(firstFile).toString()
   fs.writeFileSync(dist, content.replace(/<\/script>/g, '<\\x3cscript>'))
   sources.forEach(function (src) {
     content = fs.readFileSync(src).toString()
@@ -65,10 +68,10 @@ function concat(sources, dist) {
 }
 
 function getFileMD5(path) {
-  var str = fs.readFileSync(path, 'utf-8')
-  var md5um = crypto.createHash('md5')
+  const str = fs.readFileSync(path, 'utf-8')
+  const md5um = crypto.createHash('md5')
   md5um.update(str)
-  var md5 = md5um.digest('hex')
+  const md5 = md5um.digest('hex')
   return md5
 }
 
@@ -147,7 +150,7 @@ const helper = {
           exclude: files,
           loader: ExtractTextPlugin.extract(
             'style-loader',
-            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]',
+            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]!postcss-loader',
             SOURCE_IN_CSS_PUBLIC_PATH
           )
         },
@@ -211,6 +214,12 @@ const helper = {
           loader: 'file-loader'
         }
       ]
+    },
+    json: function () {
+      return {
+        test: /\.json$/,
+        loader: 'json-loader'
+      }
     }
   },
 
@@ -362,6 +371,18 @@ const helper = {
     },
     analyzer: function () {
       return new BundleAnalyzerPlugin()
+    },
+    done: function () {
+      return new DonePlugin(function () {
+        if (config.additional) {
+          config.additional.forEach(function (name) {
+            fs.copySync(`${PUBLIC}/${name}`, `${BUILD}/${name}`)
+          })
+        }
+        if (config.done) {
+          config.done(exports, config)
+        }
+      })
     }
   },
   devServer: function (params = {}) {
@@ -369,7 +390,10 @@ const helper = {
       contentBase: BUILD,
       host: process.platform === 'win32' ? '127.0.0.1' : '0.0.0.0',
       port: port,
-      stats: { chunks: false },
+      stats: {
+        chunks: false,
+        children: false
+      },
       proxy: {}
     }
     if (isHot) {
@@ -391,6 +415,12 @@ const helper = {
       }
     })
     return Object.assign(obj, params)
+  },
+  postcss: function () {
+    return [
+      require('postcss-import')({ addDependencyTo: webpack }),
+      require('postcss-cssnext')({ autoprefixer: { browsers: BROWSER } })
+    ]
   }
 }
 

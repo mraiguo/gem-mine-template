@@ -4,6 +4,8 @@ const { helper, SRC, join } = require('./helper')
 const isHot = !!process.env.npm_config_hot
 const shouldAnalyzer = !!process.env.npm_config_analyzer
 
+const custom = require('../webpack')
+
 const config = {
   entry: {
     polyfill: ['babel-polyfill'],
@@ -19,19 +21,26 @@ const config = {
       helper.loaders.css(),
       helper.loaders.less(),
       helper.loaders.sass(),
-      helper.loaders.source()
+      helper.loaders.json(),
+      helper.loaders.source(),
+      custom.loaders
     )
   },
-  plugins: [
+  plugins: join(
     helper.plugins.define('dev', {
       DEBUG: true
     }),
     helper.plugins.ignore(/vertx/),
     helper.plugins.extractCss(),
     helper.plugins.splitCss(),
-    helper.plugins.html()
-  ],
-  devServer: helper.devServer()
+    helper.plugins.html(),
+
+    custom.plugins,
+    helper.plugins.done()
+  ),
+  devServer: helper.devServer(),
+  postcss: helper.postcss,
+  stats: { chunks: false, children: false }
 }
 
 if (isHot) {
