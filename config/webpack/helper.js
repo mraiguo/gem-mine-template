@@ -102,6 +102,47 @@ function join() {
   return result
 }
 
+function styleLoader(type, exclude) {
+  const excludes = join(NODE_MODULES, STYLE, exclude)
+  const loaders = ['style-loader', 'css-loader']
+  const CSS_MODULE = 'modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]'
+  let reg
+  if (type === 'css') {
+    loaders.push('postcss-loader')
+    reg = /\.css$/
+  } else if (type === 'less') {
+    loaders.push('less-loader')
+    reg = /\.less$/
+  } else if (type === 'sass') {
+    loaders.push('sass-loader?outputStyle=expanded')
+    reg = /\.scss$/
+  }
+
+  let last = ''
+  if (type !== 'css') {
+    last = `!${loaders[2]}`
+  }
+
+  const result = [
+    {
+      test: reg,
+      exclude: excludes,
+      loader: isHot
+        ? `${loaders[0]}!${loaders[1]}?${CSS_MODULE}!${loaders[2]}`
+        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}?${CSS_MODULE}!${loaders[2]}`, SOURCE_IN_CSS_PUBLIC_PATH)
+    },
+    {
+      test: reg,
+      include: excludes,
+      loader: isHot
+        ? `${loaders[0]}!${loaders[1]}${last}`
+        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}${last}`, SOURCE_IN_CSS_PUBLIC_PATH)
+    }
+  ]
+
+  return result
+}
+
 const helper = {
   output: {
     // for dev/production
@@ -142,65 +183,13 @@ const helper = {
       return obj
     },
     css: function (exclude) {
-      const files = join(NODE_MODULES, STYLE, exclude)
-      return [
-        {
-          test: /\.css$/,
-          exclude: files,
-          loader: ExtractTextPlugin.extract(
-            'style-loader',
-            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]!postcss-loader',
-            SOURCE_IN_CSS_PUBLIC_PATH
-          )
-        },
-        {
-          test: /\.css$/,
-          include: files,
-          loader: ExtractTextPlugin.extract('style-loader', 'css-loader', SOURCE_IN_CSS_PUBLIC_PATH)
-        }
-      ]
+      return styleLoader('css', exclude)
     },
     less: function (exclude) {
-      const files = join(NODE_MODULES, STYLE, exclude)
-      return [
-        {
-          test: /\.less$/,
-          exclude: files,
-          loader: ExtractTextPlugin.extract(
-            'style-loader',
-            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]!less-loader',
-            SOURCE_IN_CSS_PUBLIC_PATH
-          )
-        },
-        {
-          test: /\.less$/,
-          include: files,
-          loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader', SOURCE_IN_CSS_PUBLIC_PATH)
-        }
-      ]
+      return styleLoader('less', exclude)
     },
     sass: function (exclude) {
-      const files = join(NODE_MODULES, STYLE, exclude)
-      return [
-        {
-          test: /\.scss$/,
-          exclude: files,
-          loader: ExtractTextPlugin.extract(
-            'style-loader',
-            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]!sass-loader?outputStyle=expanded',
-            SOURCE_IN_CSS_PUBLIC_PATH
-          )
-        },
-        {
-          test: /\.scss$/,
-          include: files,
-          loader: ExtractTextPlugin.extract(
-            'style-loader',
-            'css-loader!sass-loader?outputStyle=expanded',
-            SOURCE_IN_CSS_PUBLIC_PATH
-          )
-        }
-      ]
+      return styleLoader('sass', exclude)
     },
     source: function () {
       return [
