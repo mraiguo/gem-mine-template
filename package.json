@@ -55,7 +55,7 @@
     "webpack-dev-server": "1.16.3"
   },
   "scripts": {
-    "start": "cross-env MODE=dev webpack-dev-server --progress",
+    "start": "npm run lint && cross-env MODE=dev webpack-dev-server --progress",
     "build": "cross-env MODE=production webpack",
     "vendor": "cross-env MODE=vendor webpack",
     "polyfill": "cross-env MODE=polyfill webpack",
