@@ -1,5 +1,4 @@
 const path = require('path')
-const util = require('util')
 const fs = require('fs-extra')
 const crypto = require('crypto')
 const execSync = require('child_process').execSync
