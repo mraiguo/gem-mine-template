@@ -9,6 +9,7 @@
   <% for(var index in htmlWebpackPlugin.files.chunks.main.css) {%>
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>" />
   <%}%>
+  <!--[if IE 9]><script>requestAnimationFrame= function(cb){setTimeout(cb, 0);}</script><![endif]-->
 
   <% if ( htmlWebpackPlugin.options.vendor ) { %>
     <script>if (typeof Set !== 'function') { document.write('<script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>

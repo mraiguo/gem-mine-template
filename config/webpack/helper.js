@@ -1,5 +1,4 @@
 const path = require('path')
-const util = require('util')
 const fs = require('fs-extra')
 const crypto = require('crypto')
 const execSync = require('child_process').execSync
@@ -49,8 +48,6 @@ if (isLocal) {
 
 const isHot = !!process.env.npm_config_hot
 const port = process.env.npm_config_port || config.port || 9000
-
-const BROWSER = ['last 2 versions', 'ie >= 8']
 
 function exec(cmd) {
   execSync(cmd, {}).toString()

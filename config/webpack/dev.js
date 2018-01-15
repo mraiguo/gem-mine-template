@@ -9,7 +9,7 @@ const custom = require('../webpack')
 const config = {
   entry: {
     polyfill: ['babel-polyfill'],
-    main: path.resolve(SRC, 'index.js')
+    main: [path.resolve(SRC, 'index.js')]
   },
   output: helper.output.hash(),
   resolve: helper.resolve(),
