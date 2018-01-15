@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.1.0",
   "description": "",
-  "browserslist": ["last 2 versions", "ie>=8"],
+  "browserslist": [
+    "last 2 versions",
+    "ie>=8"
+  ],
   "dependencies": {
     "cat-eye": "^0.3.0"
   },
