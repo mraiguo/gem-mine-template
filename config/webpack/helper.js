@@ -170,7 +170,7 @@ const helper = {
   },
 
   loaders: {
-    babel: function () {
+    babel: function (hot) {
       const obj = {
         test: /\.jsx?$/,
         exclude: NODE_MODULES
