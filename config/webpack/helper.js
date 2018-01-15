@@ -46,7 +46,6 @@ if (isLocal) {
   SOURCE_IN_HTML_PUBLIC_PATH = config.publicPath || DEFAULT_PUBLIC_PATH + 'bundle/'
 }
 
-const isHot = process.env.npm_config_hot !== ''
 const port = process.env.npm_config_port || config.port || 9000
 
 function exec(cmd) {
@@ -102,7 +101,7 @@ function join() {
   return result
 }
 
-function styleLoader(type, exclude) {
+function loadStyle(hot, type, exclude) {
   const excludes = join(NODE_MODULES, STYLE, exclude)
   const styleLoader = {
     loader: 'style-loader'
@@ -157,7 +156,7 @@ function styleLoader(type, exclude) {
     {
       test: reg,
       exclude: excludes,
-      use: isHot
+      use: hot
         ? [styleLoader, cssLoaderWithModule, thirdLoader]
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
@@ -167,7 +166,7 @@ function styleLoader(type, exclude) {
     {
       test: reg,
       include: excludes,
-      use: isHot
+      use: hot
         ? [styleLoader, cssLoader, thirdLoader]
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
@@ -205,13 +204,13 @@ const helper = {
   },
 
   loaders: {
-    babel: function () {
+    babel: function (hot) {
       const obj = {
         test: /\.jsx?$/,
         exclude: NODE_MODULES
       }
       let loaders
-      if (isHot) {
+      if (hot) {
         loaders = ['react-hot-loader/webpack', 'babel-loader']
       } else {
         loaders = ['babel-loader']
@@ -219,14 +218,14 @@ const helper = {
       obj.use = loaders
       return obj
     },
-    css: function (exclude) {
-      return styleLoader('css', exclude)
+    css: function (hot, exclude) {
+      return loadStyle(hot, 'css', exclude)
     },
-    less: function (exclude) {
-      return styleLoader('less', exclude)
+    less: function (hot, exclude) {
+      return loadStyle(hot, 'less', exclude)
     },
-    sass: function (exclude) {
-      return styleLoader('sass', exclude)
+    sass: function (hot, exclude) {
+      return loadStyle(hot, 'sass', exclude)
     },
     source: function () {
       return [
@@ -412,7 +411,7 @@ const helper = {
       })
     }
   },
-  devServer: function (params = {}) {
+  devServer: function (hot, params = {}) {
     let obj = {
       contentBase: BUILD,
       host: process.platform === 'win32' ? '127.0.0.1' : '0.0.0.0',
@@ -423,7 +422,7 @@ const helper = {
       },
       proxy: {}
     }
-    if (isHot) {
+    if (hot) {
       obj.inline = true
       obj.hot = true
     }

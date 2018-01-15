@@ -17,10 +17,10 @@ const config = {
   devtool: 'source-map',
   module: {
     loaders: join(
-      helper.loaders.babel(),
-      helper.loaders.css(),
-      helper.loaders.less(),
-      helper.loaders.sass(),
+      helper.loaders.babel(isHot),
+      helper.loaders.css(isHot),
+      helper.loaders.less(isHot),
+      helper.loaders.sass(isHot),
       helper.loaders.json(),
       helper.loaders.source(),
       custom.loaders
@@ -39,7 +39,6 @@ const config = {
     custom.plugins,
     helper.plugins.done()
   ),
-  devServer: helper.devServer(),
   stats: {
     children: false,
     colors: true
@@ -53,7 +52,7 @@ if (shouldAnalyzer) {
   config.plugins.push(helper.plugins.analyzer())
 }
 
-const devServer = helper.devServer()
+const devServer = helper.devServer(isHot)
 config.plugins.push(helper.plugins.browser(`http://${devServer.host}:${devServer.port}`))
 config.devServer = devServer
 
