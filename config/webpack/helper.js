@@ -40,7 +40,8 @@ const SOURCE_IN_CSS_PUBLIC_PATH = {
 }
 // jsx 编译后的 js 是被 html 引入，html 在 bundle 的上一级
 let SOURCE_IN_HTML_PUBLIC_PATH
-if (MODE === 'dev') {
+const isLocal = MODE === 'dev'
+if (isLocal) {
   SOURCE_IN_HTML_PUBLIC_PATH = ''
 } else {
   SOURCE_IN_HTML_PUBLIC_PATH = config.publicPath || DEFAULT_PUBLIC_PATH + 'bundle/'
@@ -312,7 +313,7 @@ const helper = {
       const obj = Object.assign(
         {
           template: path.resolve(PUBLIC, 'index.html'),
-          filename: '../index.html',
+          filename: isLocal ? 'index.html' : '../index.html',
           inject: false,
           showErrors: true,
           title: config.title
