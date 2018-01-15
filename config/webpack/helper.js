@@ -415,6 +415,7 @@ const helper = {
       port: port,
       overlay: true,
       stats: {
+        chunks: false,
         children: false
       },
       proxy: {}
