@@ -14,7 +14,7 @@ const config = {
   output: helper.output.hash(),
   resolve: helper.resolve(),
   resolveLoader: helper.resolveLoader(),
-  devtool: 'eval-source-map',
+  devtool: 'source-map',
   module: {
     loaders: join(
       helper.loaders.babel(),
@@ -31,6 +31,7 @@ const config = {
       DEBUG: true
     }),
     helper.plugins.ignore(/vertx/),
+    helper.plugins.scopeHosting(),
     helper.plugins.extractCss(),
     helper.plugins.splitCss(),
     helper.plugins.html(),
@@ -39,8 +40,10 @@ const config = {
     helper.plugins.done()
   ),
   devServer: helper.devServer(),
-  postcss: helper.postcss,
-  stats: { chunks: false, children: false }
+  stats: {
+    children: false,
+    colors: true
+  }
 }
 
 if (isHot) {

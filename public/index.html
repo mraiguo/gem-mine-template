@@ -8,20 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <% for(var index in htmlWebpackPlugin.files.chunks.main.css) {%>
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>" />
-    <%}%>
+  <%}%>
 
-      <% if ( htmlWebpackPlugin.options.vendor ) { %>
-        <!--[if IE 9]>
-    <script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"></script>
-    <![endif]-->
-        <script>if (typeof Promise !== 'function') { document.write('<script src="./polyfill-promise.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
-        <script src="./vendor.js?<%= htmlWebpackPlugin.options.vendor %>"></script>
-        <% } else { %>
-          <script>if (typeof Promise !== 'function') { document.write('<script src="<%= htmlWebpackPlugin.files.chunks.polyfill.entry %>"><\/script>'); }</script>
-          <% } %>
-            <title>
-              <%= htmlWebpackPlugin.options.title %>
-            </title>
+  <% if ( htmlWebpackPlugin.options.vendor ) { %>
+    <script>if (typeof Set !== 'function') { document.write('<script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
+    <script>if (typeof Promise !== 'function') { document.write('<script src="./polyfill-promise.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
+    <script src="./vendor.js?<%= htmlWebpackPlugin.options.vendor %>"></script>
+  <% } else { %>
+    <script src="<%= htmlWebpackPlugin.files.chunks.polyfill.entry %>"></script>
+  <% } %>
+  <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 
 <body>

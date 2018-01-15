@@ -7,7 +7,7 @@ const config = {
   },
   output: helper.output.lib(),
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['.js']
   },
   module: {},
   plugins: [

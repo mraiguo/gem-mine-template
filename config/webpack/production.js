@@ -45,16 +45,16 @@ const config = {
       helper.loaders.css(),
       helper.loaders.less(),
       helper.loaders.sass(),
-      helper.loaders.json(),
       helper.loaders.source(),
       custom.loaders
     )
   },
   plugins: join(
-    helper.plugins.dedupe(),
-    helper.plugins.occurence(),
-    helper.plugins.define('production'),
+    helper.plugins.define('production', {
+      DEBUG: false
+    }),
     helper.plugins.clean(),
+    helper.plugins.scopeHosting(),
     helper.plugins.dllReference(),
     helper.plugins.extractCss(),
     helper.plugins.splitCss(),
@@ -70,8 +70,10 @@ const config = {
     custom.plugins,
     helper.plugins.done()
   ),
-  postcss: helper.postcss,
-  stats: { chunks: false, children: false }
+  stats: {
+    children: false,
+    colors: true
+  }
 }
 
 if (shouldAnalyzer) {

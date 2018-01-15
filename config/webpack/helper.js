@@ -22,7 +22,8 @@ try {
 }
 
 const ROOT = path.resolve(__dirname, '../../')
-const NODE_MODULES = path.resolve(ROOT, 'node_modules')
+const NM = 'node_modules'
+const NODE_MODULES = path.resolve(ROOT, NM)
 const SRC = path.resolve(ROOT, 'src')
 const BUILD = config.buildPath || path.resolve(ROOT, 'build')
 const PUBLIC = path.resolve(ROOT, 'public')
@@ -105,42 +106,77 @@ function join() {
 
 function styleLoader(type, exclude) {
   const excludes = join(NODE_MODULES, STYLE, exclude)
-  const loaders = ['style-loader', 'css-loader']
-  const CSS_MODULE = 'modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]'
-  let reg
-  if (type === 'css') {
-    loaders.push('postcss-loader')
-    reg = /\.css$/
-  } else if (type === 'less') {
-    loaders.push('less-loader')
-    reg = /\.less$/
-  } else if (type === 'sass') {
-    loaders.push('sass-loader?outputStyle=expanded')
-    reg = /\.scss$/
+  const styleLoader = {
+    loader: 'style-loader'
   }
 
-  let last = ''
-  if (type !== 'css') {
-    last = `!${loaders[2]}`
+  const cssLoader = {
+    loader: 'css-loader'
+  }
+
+  const cssLoaderWithModule = {
+    loader: 'css-loader',
+    options: {
+      modules: true,
+      importLoaders: 1,
+      localIdentName: '[name]__[local]-[hash:base64:5]'
+    }
+  }
+
+  let thirdLoader
+
+  let reg
+  if (type === 'css') {
+    thirdLoader = {
+      loader: 'postcss-loader',
+      options: {
+        ident: 'postcss',
+        plugins: loader => [require('postcss-import')(), require('postcss-cssnext')()],
+        sourceMap: true
+      }
+    }
+    reg = /\.css$/
+  } else if (type === 'less') {
+    thirdLoader = {
+      loader: 'less-loader',
+      options: {
+        sourceMap: true
+      }
+    }
+    reg = /\.less$/
+  } else if (type === 'sass') {
+    thirdLoader = {
+      loader: 'sass-loader',
+      options: {
+        outputStyle: 'expand',
+        sourceMap: true
+      }
+    }
+    reg = /\.scss$/
   }
 
   const result = [
     {
       test: reg,
       exclude: excludes,
-      loader: isHot
-        ? `${loaders[0]}!${loaders[1]}?${CSS_MODULE}!${loaders[2]}`
-        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}?${CSS_MODULE}!${loaders[2]}`, SOURCE_IN_CSS_PUBLIC_PATH)
+      use: isHot
+        ? [styleLoader, cssLoaderWithModule, thirdLoader]
+        : ExtractTextPlugin.extract({
+          fallback: styleLoader,
+          use: [cssLoaderWithModule, thirdLoader]
+        })
     },
     {
       test: reg,
       include: excludes,
-      loader: isHot
-        ? `${loaders[0]}!${loaders[1]}${last}`
-        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}${last}`, SOURCE_IN_CSS_PUBLIC_PATH)
+      use: isHot
+        ? [styleLoader, cssLoader, thirdLoader]
+        : ExtractTextPlugin.extract({
+          fallback: styleLoader,
+          use: [cssLoader, thirdLoader]
+        })
     }
   ]
-
   return result
 }
 
@@ -174,13 +210,15 @@ const helper = {
     babel: function () {
       const obj = {
         test: /\.jsx?$/,
-        exclude: /node_modules/
+        exclude: NODE_MODULES
       }
+      let loaders
       if (isHot) {
-        obj.loader = 'react-hot!babel-loader'
+        loaders = ['react-hot-loader/webpack', 'babel-loader']
       } else {
-        obj.loader = 'babel-loader'
+        loaders = ['babel-loader']
       }
+      obj.use = loaders
       return obj
     },
     css: function (exclude) {
@@ -215,8 +253,8 @@ const helper = {
   resolve: function () {
     const params = config.resolve || {}
     const obj = {
-      fallback: NODE_MODULES,
-      extensions: ['', '.js', '.jsx', '.css', '.less', '.scss'],
+      modules: [NM],
+      extensions: ['.js', '.jsx', '.css', '.less', '.scss'],
       alias: {
         config: CONFIG,
         components: path.resolve(SRC, 'components'),
@@ -242,7 +280,7 @@ const helper = {
   resolveLoader: function (params = {}) {
     return Object.assign(
       {
-        root: NODE_MODULES
+        modules: [NM]
       },
       params
     )
@@ -260,6 +298,9 @@ const helper = {
     },
     ignore: function (rule) {
       return new webpack.IgnorePlugin(rule)
+    },
+    scopeHosting: function () {
+      return new webpack.optimize.ModuleConcatenationPlugin()
     },
     hot: function () {
       return new webpack.HotModuleReplacementPlugin()
@@ -313,14 +354,9 @@ const helper = {
       return new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false,
-          properties: false,
-          screw_ie8: false
-        },
-        mangle: {
-          screw_ie8: false
+          properties: false
         },
         output: {
-          screw_ie8: false,
           quote_keys: true,
           comments: false
         },
@@ -354,7 +390,8 @@ const helper = {
       return new OpenBrowserPlugin({ url })
     },
     extractCss: function () {
-      return new ExtractTextPlugin('[name].[contenthash].css', {
+      return new ExtractTextPlugin({
+        filename: '[name].[contenthash].css',
         allChunks: true
       })
     },
@@ -382,8 +419,8 @@ const helper = {
       contentBase: BUILD,
       host: process.platform === 'win32' ? '127.0.0.1' : '0.0.0.0',
       port: port,
+      overlay: true,
       stats: {
-        chunks: false,
         children: false
       },
       proxy: {}
