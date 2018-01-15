@@ -46,7 +46,7 @@ if (isLocal) {
   SOURCE_IN_HTML_PUBLIC_PATH = config.publicPath || DEFAULT_PUBLIC_PATH + 'bundle/'
 }
 
-const isHot = !!process.env.npm_config_hot
+const isHot = process.env.npm_config_hot !== ''
 const port = process.env.npm_config_port || config.port || 9000
 
 function exec(cmd) {

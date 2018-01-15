@@ -1,7 +1,7 @@
 const path = require('path')
 const { helper, SRC, join } = require('./helper')
 
-const isHot = !!process.env.npm_config_hot
+const isHot = process.env.npm_config_hot !== ''
 const shouldAnalyzer = !!process.env.npm_config_analyzer
 
 const custom = require('../webpack')
