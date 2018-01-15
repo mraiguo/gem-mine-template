@@ -22,7 +22,8 @@ try {
 }
 
 const ROOT = path.resolve(__dirname, '../../')
-const NODE_MODULES = path.resolve(ROOT, 'node_modules')
+const NM = 'node_modules'
+const NODE_MODULES = path.resolve(ROOT, NM)
 const SRC = path.resolve(ROOT, 'src')
 const BUILD = config.buildPath || path.resolve(ROOT, 'build')
 const PUBLIC = path.resolve(ROOT, 'public')
@@ -39,16 +40,14 @@ const SOURCE_IN_CSS_PUBLIC_PATH = {
 }
 // jsx 编译后的 js 是被 html 引入，html 在 bundle 的上一级
 let SOURCE_IN_HTML_PUBLIC_PATH
-if (MODE === 'dev') {
+const isLocal = MODE === 'dev'
+if (isLocal) {
   SOURCE_IN_HTML_PUBLIC_PATH = ''
 } else {
   SOURCE_IN_HTML_PUBLIC_PATH = config.publicPath || DEFAULT_PUBLIC_PATH + 'bundle/'
 }
 
-const isHot = !!process.env.npm_config_hot
 const port = process.env.npm_config_port || config.port || 9000
-
-const BROWSER = ['last 2 versions', 'ie >= 8']
 
 function exec(cmd) {
   execSync(cmd, {}).toString()
@@ -56,7 +55,7 @@ function exec(cmd) {
 
 function concat(sources, dist) {
   const dir = path.dirname(dist)
-  exec(util.format('mkdir -p %s', dir))
+  fs.ensureDirSync(dir)
 
   const firstFile = sources.shift()
   let content = fs.readFileSync(firstFile).toString()
@@ -103,7 +102,7 @@ function join() {
   return result
 }
 
-function styleLoader(type, exclude) {
+function loadStyle(hot, type, exclude) {
   const excludes = join(NODE_MODULES, STYLE, exclude)
   const loaders = ['style-loader', 'css-loader']
   const CSS_MODULE = 'modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]'
@@ -128,14 +127,14 @@ function styleLoader(type, exclude) {
     {
       test: reg,
       exclude: excludes,
-      loader: isHot
+      loader: hot
         ? `${loaders[0]}!${loaders[1]}?${CSS_MODULE}!${loaders[2]}`
         : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}?${CSS_MODULE}!${loaders[2]}`, SOURCE_IN_CSS_PUBLIC_PATH)
     },
     {
       test: reg,
       include: excludes,
-      loader: isHot
+      loader: hot
         ? `${loaders[0]}!${loaders[1]}${last}`
         : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}${last}`, SOURCE_IN_CSS_PUBLIC_PATH)
     }
@@ -174,23 +173,23 @@ const helper = {
     babel: function () {
       const obj = {
         test: /\.jsx?$/,
-        exclude: /node_modules/
+        exclude: NODE_MODULES
       }
-      if (isHot) {
-        obj.loader = 'react-hot!babel-loader'
+      if (hot) {
+        obj.loader = 'react-hot-loader!babel-loader'
       } else {
         obj.loader = 'babel-loader'
       }
       return obj
     },
-    css: function (exclude) {
-      return styleLoader('css', exclude)
+    css: function (hot, exclude) {
+      return loadStyle(hot, 'css', exclude)
     },
-    less: function (exclude) {
-      return styleLoader('less', exclude)
+    less: function (hot, exclude) {
+      return loadStyle(hot, 'less', exclude)
     },
-    sass: function (exclude) {
-      return styleLoader('sass', exclude)
+    sass: function (hot, exclude) {
+      return loadStyle(hot, 'sass', exclude)
     },
     source: function () {
       return [
@@ -284,7 +283,7 @@ const helper = {
       const obj = Object.assign(
         {
           template: path.resolve(PUBLIC, 'index.html'),
-          filename: '../index.html',
+          filename: isLocal ? 'index.html' : '../index.html',
           inject: false,
           showErrors: true,
           title: config.title
@@ -390,7 +389,7 @@ const helper = {
       })
     }
   },
-  devServer: function (params = {}) {
+  devServer: function (hot, params = {}) {
     let obj = {
       contentBase: BUILD,
       host: process.platform === 'win32' ? '127.0.0.1' : '0.0.0.0',
@@ -401,7 +400,7 @@ const helper = {
       },
       proxy: {}
     }
-    if (isHot) {
+    if (hot) {
       obj.inline = true
       obj.hot = true
     }

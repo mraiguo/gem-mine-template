@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "description": "",
+  "browserslist": ["last 2 versions", "ie>=8"],
   "dependencies": {
     "cat-eye": "^0.3.0"
   },
@@ -42,6 +43,7 @@
     "less-vars-to-js": "^1.2.0",
     "node-sass": "^4.5.3",
     "open-browser-webpack-plugin": "0.0.5",
+    "postcss": "^6.0.14",
     "postcss-cssnext": "^3.0.2",
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.10",
@@ -55,7 +57,7 @@
     "webpack-dev-server": "1.16.3"
   },
   "scripts": {
-    "start": "npm run lint && cross-env MODE=dev webpack-dev-server --progress",
+    "start": "cross-env MODE=dev webpack-dev-server --progress",
     "build": "cross-env MODE=production webpack",
     "vendor": "cross-env MODE=vendor webpack",
     "polyfill": "cross-env MODE=polyfill webpack",

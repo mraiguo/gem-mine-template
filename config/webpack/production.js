@@ -54,7 +54,9 @@ const config = {
   plugins: join(
     helper.plugins.dedupe(),
     helper.plugins.occurence(),
-    helper.plugins.define('production'),
+    helper.plugins.define('production', {
+      DEBUG: false
+    }),
     helper.plugins.clean(),
     helper.plugins.dllReference(),
     helper.plugins.extractCss(),
