@@ -58,7 +58,7 @@ function exec(cmd) {
 
 function concat(sources, dist) {
   const dir = path.dirname(dist)
-  exec(util.format('mkdir -p %s', dir))
+  fs.ensureDirSync(dir)
 
   const firstFile = sources.shift()
   let content = fs.readFileSync(firstFile).toString()
