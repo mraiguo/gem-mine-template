@@ -371,12 +371,6 @@ const helper = {
         )
       )
     },
-    dedupe: function () {
-      return new webpack.optimize.DedupePlugin()
-    },
-    occurence: function () {
-      return new webpack.optimize.OccurenceOrderPlugin()
-    },
     browser: function (url) {
       return new OpenBrowserPlugin({ url })
     },
