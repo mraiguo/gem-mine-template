@@ -11,9 +11,7 @@
   <%}%>
 
   <% if ( htmlWebpackPlugin.options.vendor ) { %>
-    <!--[if lte IE 9]>
-      <script src="./polyfill-ie8.js"></script>
-    <![endif]-->
+    <!--[if lte IE 9]><script src="./polyfill-ie8.js"></script><![endif]-->
     <script>if (typeof Symbol !== 'function') {document.write('<script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>');}</script>
     <script>if (typeof Promise !== 'function') {document.write('<script src="./polyfill-promise.js"><\/script>');}</script>
     <script src="./vendor.js?<%= htmlWebpackPlugin.options.vendor %>"></script>
