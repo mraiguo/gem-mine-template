@@ -8,7 +8,7 @@ const custom = require('../webpack')
 
 const config = {
   entry: {
-    polyfill: [path.resolve(PUBLIC, 'polyfill.js'), 'babel-polyfill'],
+    polyfill: [path.resolve(PUBLIC, 'polyfill-ie8.js'), 'babel-polyfill'],
     main: [path.resolve(SRC, 'index.js')]
   },
   output: helper.output.hash(),
