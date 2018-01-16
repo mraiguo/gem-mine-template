@@ -238,12 +238,6 @@ const helper = {
           loader: 'file-loader'
         }
       ]
-    },
-    json: function () {
-      return {
-        test: /\.json$/,
-        loader: 'json-loader'
-      }
     }
   },
 

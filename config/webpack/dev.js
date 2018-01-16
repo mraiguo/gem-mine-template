@@ -21,7 +21,6 @@ const config = {
       helper.loaders.css(isHot),
       helper.loaders.less(isHot),
       helper.loaders.sass(isHot),
-      helper.loaders.json(),
       helper.loaders.source(),
       custom.loaders
     )
