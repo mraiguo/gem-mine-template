@@ -12,6 +12,7 @@ const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const DonePlugin = require('./plugins/done')
 
+const pkg = require('../../package.json')
 const config = require('../webpack')
 let proxy
 try {
@@ -45,8 +46,6 @@ if (isLocal) {
 } else {
   SOURCE_IN_HTML_PUBLIC_PATH = config.publicPath || DEFAULT_PUBLIC_PATH + 'bundle/'
 }
-
-const port = process.env.npm_config_port || config.port || 9000
 
 function exec(cmd) {
   execSync(cmd, {}).toString()
@@ -388,7 +387,7 @@ const helper = {
       })
     }
   },
-  devServer: function (hot, params = {}) {
+  devServer: function (hot, port, params = {}) {
     let obj = {
       contentBase: BUILD,
       host: process.platform === 'win32' ? '127.0.0.1' : '0.0.0.0',
@@ -422,7 +421,7 @@ const helper = {
   postcss: function () {
     return [
       require('postcss-import')({ addDependencyTo: webpack }),
-      require('postcss-cssnext')({ autoprefixer: { browsers: BROWSER } })
+      require('postcss-cssnext')({ autoprefixer: {browsers: pkg.browserslist} })
     ]
   }
 }
