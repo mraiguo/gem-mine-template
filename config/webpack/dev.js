@@ -56,9 +56,7 @@ const configPromise = new Promise(function (resolve, reject) {
   let port = process.env.npm_config_port || config.port || 9000
   detect(port)
     .then(function (p) {
-      if (port === p) {
-        return true
-      } else {
+      if (port !== p) {
         console.log(chalk.cyanBright(`warning: port ${port} has been used, will use the ${p} instead.\n`))
         port = p
       }
