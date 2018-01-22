@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
+const os = require('os')
 const crypto = require('crypto')
 const execSync = require('child_process').execSync
 
@@ -139,6 +140,35 @@ function loadStyle(hot, type, exclude) {
   ]
 
   return result
+}
+
+function getIP() {
+  let host = process.env.npm_config_host
+  if (!host) {
+    if (process.platform === 'win32') {
+      const ns = os.networkInterfaces()
+      const keys = Object.keys(ns)
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const arr = ns[key]
+        for (let j = 0; j < arr.length; j++) {
+          if (arr[j].family === 'IPv4' && arr[j].internal === false) {
+            host = arr[j].address
+            break
+          }
+        }
+        if (host) {
+          break
+        }
+      }
+      if (!host) {
+        host = 'localhost'
+      }
+    } else {
+      host = '0.0.0.0'
+    }
+  }
+  return host
 }
 
 const helper = {
@@ -390,7 +420,7 @@ const helper = {
   devServer: function (hot, port, params = {}) {
     let obj = {
       contentBase: BUILD,
-      host: process.platform === 'win32' ? '127.0.0.1' : '0.0.0.0',
+      host: getIP(),
       port: port,
       stats: {
         chunks: false,
@@ -421,7 +451,7 @@ const helper = {
   postcss: function () {
     return [
       require('postcss-import')({ addDependencyTo: webpack }),
-      require('postcss-cssnext')({ autoprefixer: {browsers: pkg.browserslist} })
+      require('postcss-cssnext')({ autoprefixer: { browsers: pkg.browserslist } })
     ]
   }
 }
