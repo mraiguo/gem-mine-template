@@ -1,23 +1,25 @@
 const path = require('path')
 const detect = require('detect-port')
 const chalk = require('chalk')
-const { helper, SRC, join } = require('./helper')
+const { helper, SRC, join, preBuild } = require('./helper')
 
 const isHot = process.env.npm_config_hot !== ''
 const shouldAnalyzer = !!process.env.npm_config_analyzer
 
 const custom = require('../webpack')
 
+const version = preBuild()
+
 const configPromise = new Promise(function (resolve, reject) {
   const config = {
     entry: {
-      polyfill: ['babel-polyfill'],
       main: [path.resolve(SRC, 'index.js')]
     },
     output: helper.output.hash(),
     resolve: helper.resolve(),
     resolveLoader: helper.resolveLoader(),
-    devtool: 'source-map',
+    devtool: 'cheap-module-eval-source-map',
+    cache: true,
     module: {
       loaders: join(
         helper.loaders.babel(isHot),
@@ -34,9 +36,10 @@ const configPromise = new Promise(function (resolve, reject) {
       }),
       helper.plugins.ignore(/vertx/),
       helper.plugins.scopeHosting(),
+      helper.plugins.dllReference(),
       helper.plugins.extractCss(),
       helper.plugins.splitCss(),
-      helper.plugins.html(),
+      helper.plugins.html(Object.assign(version)),
 
       custom.plugins,
       helper.plugins.done()
