@@ -8,13 +8,9 @@
   <% for(var index in htmlWebpackPlugin.files.chunks.main.css) {%>
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>" />
   <%}%>
-
-  <% if ( htmlWebpackPlugin.options.vendor ) { %>
+    <script>if (typeof Set !== 'function') { document.write('<script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
     <script>if (typeof Promise !== 'function') { document.write('<script src="./polyfill-promise.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
     <script src="./vendor.js?<%= htmlWebpackPlugin.options.vendor %>"></script>
-  <% } else { %>
-    <script>if (typeof Promise !== 'function') { document.write('<script src="<%= htmlWebpackPlugin.files.chunks.polyfill.entry %>"><\/script>'); }</script>
-  <% } %>
   <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 

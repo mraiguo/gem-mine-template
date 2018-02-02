@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const os = require('os')
 const crypto = require('crypto')
+const chalk = require('chalk')
 const execSync = require('child_process').execSync
 
 const webpack = require('webpack')
@@ -12,7 +13,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const DonePlugin = require('./plugins/done')
 
-const pkg = require('../../package.json')
 const config = require('../webpack')
 let proxy
 try {
@@ -34,10 +34,6 @@ const BUNDLE = path.resolve(BUILD, 'bundle')
 const { MODE } = process.env
 
 const DEFAULT_PUBLIC_PATH = './'
-// css 和 图片默认打包在同一个目录
-const SOURCE_IN_CSS_PUBLIC_PATH = {
-  publicPath: config.publicPath || DEFAULT_PUBLIC_PATH
-}
 // jsx 编译后的 js 是被 html 引入，html 在 bundle 的上一级
 let SOURCE_IN_HTML_PUBLIC_PATH
 const isLocal = MODE === 'dev'
@@ -122,33 +118,66 @@ function loadStyle(hot, type, exclude) {
   let thirdLoader
 
   let reg
+  let postcssLoader
   if (type === 'css') {
-    thirdLoader = {
+    postcssLoader = {
       loader: 'postcss-loader',
       options: {
-        ident: 'postcss',
-        plugins: loader => [require('postcss-import')(), require('postcss-cssnext')()],
-        sourceMap: true
+        ident: type,
+        sourceMap: true,
+        plugins: [
+          require('postcss-import')({ addDependencyTo: webpack }),
+          require('postcss-cssnext')()
+        ]
       }
     }
     reg = /\.css$/
-  } else if (type === 'less') {
-    thirdLoader = {
-      loader: 'less-loader',
+  } else {
+    postcssLoader = {
+      loader: 'postcss-loader',
       options: {
-        sourceMap: true
+        ident: type,
+        sourceMap: true,
+        plugins: [
+          require('autoprefixer')
+        ]
       }
     }
-    reg = /\.less$/
-  } else if (type === 'sass') {
-    thirdLoader = {
-      loader: 'sass-loader',
-      options: {
-        outputStyle: 'expand',
-        sourceMap: true
+    if (type === 'less') {
+      thirdLoader = {
+        loader: 'less-loader',
+        options: {
+          sourceMap: true
+        }
       }
+      reg = /\.less$/
+    } else if (type === 'sass') {
+      thirdLoader = {
+        loader: 'sass-loader',
+        options: {
+          outputStyle: 'expand',
+          sourceMap: true
+        }
+      }
+      reg = /\.scss$/
     }
-    reg = /\.scss$/
+  }
+
+  const loaders = {
+    exclude: {
+      hot: [styleLoader, cssLoaderWithModule, postcssLoader],
+      extract: [cssLoaderWithModule, postcssLoader]
+    },
+    include: {
+      hot: [styleLoader, cssLoader, postcssLoader],
+      extract: [cssLoader, postcssLoader]
+    }
+  }
+  if (thirdLoader) {
+    loaders.exclude.hot.push(thirdLoader)
+    loaders.exclude.extract.push(thirdLoader)
+    loaders.include.hot.push(thirdLoader)
+    loaders.include.extract.push(thirdLoader)
   }
 
   const result = [
@@ -156,20 +185,20 @@ function loadStyle(hot, type, exclude) {
       test: reg,
       exclude: excludes,
       use: hot
-        ? [styleLoader, cssLoaderWithModule, thirdLoader]
+        ? loaders.exclude.hot
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
-          use: [cssLoaderWithModule, thirdLoader]
+          use: loaders.exclude.extract
         })
     },
     {
       test: reg,
       include: excludes,
       use: hot
-        ? [styleLoader, cssLoader, thirdLoader]
+        ? loaders.include.hot
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
-          use: [cssLoader, thirdLoader]
+          use: loaders.include.extract
         })
     }
   ]
@@ -203,6 +232,38 @@ function getIP() {
     }
   }
   return host
+}
+
+function preBuild() {
+  let version
+  const versionFile = path.resolve(BUILD, 'version.json')
+  const buildVendor = !!process.env.npm_config_vendor
+  const buildPolyfill = !!process.env.npm_config_polyfill
+
+  if (buildVendor || buildPolyfill) {
+    if (buildVendor && buildPolyfill) {
+      console.log(chalk.cyan('> build polyfill && vendor'))
+      exec('npm run polyfill && npm run vendor')
+    } else {
+      if (buildPolyfill) {
+        console.log(chalk.cyan('> build polyfill'))
+        exec('npm run polyfill')
+      } else {
+        console.log(chalk.cyan('> build vendor'))
+        exec('npm run vendor')
+      }
+    }
+    version = JSON.parse(fs.readFileSync(versionFile).toString())
+  } else {
+    try {
+      version = require(versionFile)
+    } catch (e) {
+      console.warn(chalk.cyan('> polyfill and vendor not generate, will auto run npm run polyfill/vendor'))
+      exec('npm run polyfill && npm run vendor')
+      version = JSON.parse(fs.readFileSync(versionFile).toString())
+    }
+  }
+  return version
 }
 
 const helper = {
@@ -239,7 +300,7 @@ const helper = {
       }
       let loaders
       if (hot) {
-        loaders = ['react-hot-loader/webpack', 'babel-loader']
+        loaders = ['cache-loader', 'react-hot-loader/webpack', 'babel-loader?cacheDirectory=true']
       } else {
         loaders = ['babel-loader']
       }
@@ -432,7 +493,12 @@ const helper = {
       overlay: true,
       stats: {
         chunks: false,
-        children: false
+        children: false,
+        chunkModules: false,
+        chunkOrigins: false,
+        colors: true,
+        errors: true,
+        warnings: false
       },
       proxy: {}
     }
@@ -455,12 +521,6 @@ const helper = {
       }
     })
     return Object.assign(obj, params)
-  },
-  postcss: function () {
-    return [
-      require('postcss-import')({ addDependencyTo: webpack }),
-      require('postcss-cssnext')({ autoprefixer: {browsers: pkg.browserslist} })
-    ]
   }
 }
 
@@ -475,3 +535,4 @@ exports.concat = concat
 exports.getFileMD5 = getFileMD5
 exports.setFileVersion = setFileVersion
 exports.join = join
+exports.preBuild = preBuild
