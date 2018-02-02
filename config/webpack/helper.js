@@ -166,14 +166,21 @@ function loadStyle(hot, type, exclude) {
 
   const loaders = {
     exclude: {
-      hot: [styleLoader, cssLoaderWithModule, postcssLoader, thirdLoader],
-      extract: [cssLoaderWithModule, postcssLoader, thirdLoader]
+      hot: [styleLoader, cssLoaderWithModule, postcssLoader],
+      extract: [cssLoaderWithModule, postcssLoader]
     },
     include: {
-      hot: [styleLoader, cssLoader, postcssLoader, thirdLoader],
-      extract: [cssLoader, postcssLoader, thirdLoader]
+      hot: [styleLoader, cssLoader, postcssLoader],
+      extract: [cssLoader, postcssLoader]
     }
   }
+  if (thirdLoader) {
+    loaders.exclude.hot.push(thirdLoader)
+    loaders.exclude.extract.push(thirdLoader)
+    loaders.include.hot.push(thirdLoader)
+    loaders.include.extract.push(thirdLoader)
+  }
+
   const result = [
     {
       test: reg,
