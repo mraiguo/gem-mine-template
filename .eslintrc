@@ -19,6 +19,7 @@
   },
   "rules": {
     "space-before-function-paren": [2, { "anonymous": "always", "named": "never" }],
-    "jsx-quotes": ["error", "prefer-double"]
+    "jsx-quotes": ["error", "prefer-double"],
+    "react/prop-types": 0
   }
 }
