@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const os = require('os')
 const crypto = require('crypto')
+const chalk = require('chalk')
 const execSync = require('child_process').execSync
 
 const webpack = require('webpack')
@@ -13,7 +14,6 @@ const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const DonePlugin = require('./plugins/done')
 
-const pkg = require('../../package.json')
 const config = require('../webpack')
 let proxy
 try {
@@ -35,10 +35,6 @@ const BUNDLE = path.resolve(BUILD, 'bundle')
 const { MODE } = process.env
 
 const DEFAULT_PUBLIC_PATH = './'
-// css 和 图片默认打包在同一个目录
-const SOURCE_IN_CSS_PUBLIC_PATH = {
-  publicPath: config.publicPath || DEFAULT_PUBLIC_PATH
-}
 // jsx 编译后的 js 是被 html 引入，html 在 bundle 的上一级
 let SOURCE_IN_HTML_PUBLIC_PATH
 const isLocal = MODE === 'dev'
@@ -128,14 +124,14 @@ function loadStyle(hot, type, exclude) {
       exclude: excludes,
       loader: hot
         ? `${loaders[0]}!${loaders[1]}?${CSS_MODULE}!${loaders[2]}`
-        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}?${CSS_MODULE}!${loaders[2]}`, SOURCE_IN_CSS_PUBLIC_PATH)
+        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}?${CSS_MODULE}!${loaders[2]}`)
     },
     {
       test: reg,
       include: excludes,
       loader: hot
         ? `${loaders[0]}!${loaders[1]}${last}`
-        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}${last}`, SOURCE_IN_CSS_PUBLIC_PATH)
+        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}${last}`)
     }
   ]
 
@@ -171,6 +167,38 @@ function getIP() {
   return host
 }
 
+function preBuild() {
+  let version
+  const versionFile = path.resolve(BUILD, 'version.json')
+  const buildVendor = !!process.env.npm_config_vendor
+  const buildPolyfill = !!process.env.npm_config_polyfill
+
+  if (buildVendor || buildPolyfill) {
+    if (buildVendor && buildPolyfill) {
+      console.log(chalk.cyan('> build polyfill && vendor'))
+      exec('npm run polyfill && npm run vendor')
+    } else {
+      if (buildPolyfill) {
+        console.log(chalk.cyan('> build polyfill'))
+        exec('npm run polyfill')
+      } else {
+        console.log(chalk.cyan('> build vendor'))
+        exec('npm run vendor')
+      }
+    }
+    version = JSON.parse(fs.readFileSync(versionFile).toString())
+  } else {
+    try {
+      version = require(versionFile)
+    } catch (e) {
+      console.warn(chalk.cyan('> polyfill and vendor not generate, will auto run npm run polyfill/vendor'))
+      exec('npm run polyfill && npm run vendor')
+      version = JSON.parse(fs.readFileSync(versionFile).toString())
+    }
+  }
+  return version
+}
+
 const helper = {
   output: {
     // for dev/production
@@ -204,7 +232,7 @@ const helper = {
         exclude: NODE_MODULES
       }
       if (hot) {
-        obj.loader = 'react-hot-loader!babel-loader'
+        obj.loader = 'cache-loader!react-hot-loader!babel-loader?cacheDirectory=true'
       } else {
         obj.loader = 'babel-loader'
       }
@@ -384,12 +412,6 @@ const helper = {
         )
       )
     },
-    dedupe: function () {
-      return new webpack.optimize.DedupePlugin()
-    },
-    occurence: function () {
-      return new webpack.optimize.OccurenceOrderPlugin()
-    },
     browser: function (url) {
       return new OpenBrowserPlugin({ url })
     },
@@ -424,7 +446,12 @@ const helper = {
       port: port,
       stats: {
         chunks: false,
-        children: false
+        children: false,
+        chunkModules: false,
+        chunkOrigins: false,
+        colors: true,
+        errors: true,
+        warnings: false
       },
       proxy: {}
     }
@@ -447,12 +474,6 @@ const helper = {
       }
     })
     return Object.assign(obj, params)
-  },
-  postcss: function () {
-    return [
-      require('postcss-import')({ addDependencyTo: webpack }),
-      require('postcss-cssnext')({ autoprefixer: { browsers: pkg.browserslist } })
-    ]
   }
 }
 
@@ -467,3 +488,4 @@ exports.concat = concat
 exports.getFileMD5 = getFileMD5
 exports.setFileVersion = setFileVersion
 exports.join = join
+exports.preBuild = preBuild

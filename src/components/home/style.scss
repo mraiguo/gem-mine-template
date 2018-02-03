@@ -11,11 +11,14 @@
   h2.title {
     color: #fa541c;
     font-size: 24px;
+    user-select: none;
   }
+
   .examples {
     border-bottom: 1px dashed;
     display: inline-block;
     margin-top: 30px;
+
     &:link,
     &:visited {
       color: #389e0d;

@@ -5,6 +5,7 @@
   border: 1px solid #ddd;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1), 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
+
 .title {
   background: #7cb305;
   height: 48px;
@@ -14,9 +15,11 @@
   font-size: 32px;
   font-weight: bold;
 }
+
 .body {
   padding: 10px 20px;
   margin-bottom: 20px;
+
   .link:link,
   .link:visited {
     color: #389e0d;
@@ -30,6 +33,7 @@
     color: #1890ff;
   }
 }
+
 .list {
   li {
     list-style-type: decimal;
@@ -39,6 +43,7 @@
 
 .footer {
   height: 36px;
+
   .goback {
     float: right;
     margin-right: 20px;

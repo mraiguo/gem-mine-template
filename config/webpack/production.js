@@ -1,36 +1,9 @@
 const path = require('path')
-const fs = require('fs')
-const { SRC, BUILD, helper, exec, join } = require('./helper')
-let version
-const versionFile = path.resolve(BUILD, 'version.json')
-const buildVendor = !!process.env.npm_config_vendor
-const buildPolyfill = !!process.env.npm_config_polyfill
+const { SRC, helper, preBuild, join } = require('./helper')
 const shouldAnalyzer = !!process.env.npm_config_analyzer
 const custom = require('../webpack')
 
-if (buildVendor || buildPolyfill) {
-  if (buildVendor && buildPolyfill) {
-    console.log('> build polyfill && vendor')
-    exec('npm run polyfill && npm run vendor')
-  } else {
-    if (buildPolyfill) {
-      console.log('> build polyfill')
-      exec('npm run polyfill')
-    } else {
-      console.log('> build vendor')
-      exec('npm run vendor')
-    }
-  }
-  version = JSON.parse(fs.readFileSync(versionFile).toString())
-} else {
-  try {
-    version = require(versionFile)
-  } catch (e) {
-    console.warn('> polyfill and vendor not generate, will auto run npm run polyfill/vendor')
-    exec('npm run polyfill && npm run vendor')
-    version = JSON.parse(fs.readFileSync(versionFile).toString())
-  }
-}
+const version = preBuild()
 
 const config = {
   entry: {
@@ -52,8 +25,6 @@ const config = {
     postLoaders: join(helper.loaders.exports(), helper.loaders.es3ify())
   },
   plugins: join(
-    helper.plugins.dedupe(),
-    helper.plugins.occurence(),
     helper.plugins.define('production', {
       DEBUG: false
     }),
@@ -73,8 +44,10 @@ const config = {
     custom.plugins,
     helper.plugins.done()
   ),
-  postcss: helper.postcss,
-  stats: { chunks: false, children: false }
+  stats: {
+    children: false,
+    colors: true
+  }
 }
 
 if (shouldAnalyzer) {

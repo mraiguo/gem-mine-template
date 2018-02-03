@@ -9,15 +9,10 @@
   <% for(var index in htmlWebpackPlugin.files.chunks.main.css) {%>
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>"/>
   <%}%>
-
-  <% if ( htmlWebpackPlugin.options.vendor ) { %>
     <!--[if lte IE 9]><script src="./polyfill-ie8.js"></script><![endif]-->
-    <script>if (typeof Symbol !== 'function') {document.write('<script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>');}</script>
-    <script>if (typeof Promise !== 'function') {document.write('<script src="./polyfill-promise.js"><\/script>');}</script>
+    <script>if (typeof Set !== 'function') { document.write('<script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
+    <script>if (typeof Promise !== 'function') { document.write('<script src="./polyfill-promise.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
     <script src="./vendor.js?<%= htmlWebpackPlugin.options.vendor %>"></script>
-  <% } else { %>
-    <script>if (typeof Promise !== 'function') {document.write('<script src="<%= htmlWebpackPlugin.files.chunks.polyfill.entry %>"><\/script>');}</script>
-  <% } %>
   <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 
