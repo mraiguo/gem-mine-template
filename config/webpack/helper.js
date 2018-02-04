@@ -122,6 +122,7 @@ function loadStyle(hot, type, exclude) {
   const postcssLoader = {
     loader: 'postcss-loader',
     options: {
+      sourceMap: true,
       config: {
         path: path.resolve(CONFIG, 'webpack')
       }
