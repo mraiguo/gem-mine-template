@@ -119,31 +119,17 @@ function loadStyle(hot, type, exclude) {
   let thirdLoader
 
   let reg
-  let postcssLoader
-  if (type === 'css') {
-    postcssLoader = {
-      loader: 'postcss-loader',
-      options: {
-        ident: type,
-        sourceMap: true,
-        plugins: [
-          require('postcss-import')({ addDependencyTo: webpack }),
-          require('postcss-cssnext')()
-        ]
+  const postcssLoader = {
+    loader: 'postcss-loader',
+    options: {
+      config: {
+        path: path.resolve(CONFIG, 'webpack')
       }
     }
+  }
+  if (type === 'css') {
     reg = /\.css$/
   } else {
-    postcssLoader = {
-      loader: 'postcss-loader',
-      options: {
-        ident: type,
-        sourceMap: true,
-        plugins: [
-          require('autoprefixer')
-        ]
-      }
-    }
     if (type === 'less') {
       thirdLoader = {
         loader: 'less-loader',
