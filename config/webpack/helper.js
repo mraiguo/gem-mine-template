@@ -102,20 +102,28 @@ function loadStyle(hot, type, exclude) {
   const loaders = ['style-loader', 'css-loader']
   const CSS_MODULE = 'modules&importLoaders=1&localIdentName=[name]__[local]-[hash:base64:5]'
   let reg
+  loaders.push(
+    `postcss-loader?${JSON.stringify({
+      config: {
+        path: path.resolve(CONFIG, 'webpack/postcss.config.js')
+      }
+    })}`
+  )
   if (type === 'css') {
-    loaders.push('postcss-loader')
     reg = /\.css$/
-  } else if (type === 'less') {
-    loaders.push('less-loader')
-    reg = /\.less$/
-  } else if (type === 'sass') {
-    loaders.push('sass-loader?outputStyle=expanded')
-    reg = /\.scss$/
+  } else {
+    if (type === 'less') {
+      loaders.push('less-loader')
+      reg = /\.less$/
+    } else if (type === 'sass') {
+      loaders.push('sass-loader?outputStyle=expanded')
+      reg = /\.scss$/
+    }
   }
 
   let last = ''
   if (type !== 'css') {
-    last = `!${loaders[2]}`
+    last = `!${loaders[3]}`
   }
 
   const result = [
@@ -123,15 +131,15 @@ function loadStyle(hot, type, exclude) {
       test: reg,
       exclude: excludes,
       loader: hot
-        ? `${loaders[0]}!${loaders[1]}?${CSS_MODULE}!${loaders[2]}`
-        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}?${CSS_MODULE}!${loaders[2]}`)
+        ? `${loaders[0]}!${loaders[1]}?${CSS_MODULE}!${loaders[2]}${last}`
+        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}?${CSS_MODULE}!${loaders[2]}${last}`)
     },
     {
       test: reg,
       include: excludes,
       loader: hot
-        ? `${loaders[0]}!${loaders[1]}${last}`
-        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}${last}`)
+        ? `${loaders[0]}!${loaders[1]}!${loaders[2]}${last}`
+        : ExtractTextPlugin.extract(loaders[0], `${loaders[1]}!${loaders[2]}${last}`)
     }
   ]
 
@@ -232,7 +240,7 @@ const helper = {
         exclude: NODE_MODULES
       }
       if (hot) {
-        obj.loader = 'cache-loader!react-hot-loader!babel-loader?cacheDirectory=true'
+        obj.loader = 'react-hot-loader!babel-loader?cacheDirectory=true'
       } else {
         obj.loader = 'babel-loader'
       }
