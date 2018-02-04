@@ -104,6 +104,7 @@ function loadStyle(hot, type, exclude) {
   let reg
   loaders.push(
     `postcss-loader?${JSON.stringify({
+      sourceMap: true,
       config: {
         path: path.resolve(CONFIG, 'webpack/postcss.config.js')
       }

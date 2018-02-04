@@ -1,5 +1,4 @@
 module.exports = {
-  ident: 'css',
-  sourceMap: true,
+  ident: 'postcss',
   plugins: [require('postcss-import')(), require('precss')(), require('postcss-cssnext')()]
 }
