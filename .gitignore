@@ -17,6 +17,7 @@ coverage
 *.patch
 
 .DS_STORE
-./manifest.json
 .idea
 .vscode
+.cache-loader
+/manifest.json
