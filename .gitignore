@@ -20,3 +20,5 @@ coverage
 ./manifest.json
 .idea
 .vscode
+.cache-loader
+/manifest.json
