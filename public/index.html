@@ -8,7 +8,7 @@
   <% for(var index in htmlWebpackPlugin.files.chunks.main.css) {%>
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>" />
   <%}%>
-    <script>if (typeof Set !== 'function') { document.write('<script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
+    <script>if (typeof Symbol !== 'function' || typeof Set !== 'function') { document.write('<script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
     <script>if (typeof Promise !== 'function') { document.write('<script src="./polyfill-promise.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
     <script src="./vendor.js?<%= htmlWebpackPlugin.options.vendor %>"></script>
   <title><%= htmlWebpackPlugin.options.title %></title>
