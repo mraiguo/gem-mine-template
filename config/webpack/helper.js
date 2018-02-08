@@ -178,9 +178,16 @@ function getIP() {
 
 function preBuild() {
   let version
-  const versionFile = path.resolve(BUILD, 'version.json')
-  const buildVendor = !!process.env.npm_config_vendor
-  const buildPolyfill = !!process.env.npm_config_polyfill
+  let versionFile = path.resolve(BUILD, 'version.json')
+  let buildVendor = !!process.env.npm_config_vendor
+  let buildPolyfill = !!process.env.npm_config_polyfill
+  if (!fs.existsSync(path.resolve(ROOT, 'manifest.json'))) {
+    buildVendor = true
+  }
+  if (!fs.existsSync(versionFile)) {
+    buildVendor = true
+    buildPolyfill = true
+  }
 
   if (buildVendor || buildPolyfill) {
     if (buildVendor && buildPolyfill) {
@@ -195,16 +202,8 @@ function preBuild() {
         exec('npm run vendor')
       }
     }
-    version = JSON.parse(fs.readFileSync(versionFile).toString())
-  } else {
-    try {
-      version = require(versionFile)
-    } catch (e) {
-      console.warn(chalk.cyan('> polyfill and vendor not generate, will auto run npm run polyfill/vendor'))
-      exec('npm run polyfill && npm run vendor')
-      version = JSON.parse(fs.readFileSync(versionFile).toString())
-    }
   }
+  version = JSON.parse(fs.readFileSync(versionFile).toString())
   return version
 }
 
