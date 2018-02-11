@@ -23,9 +23,9 @@ const configPromise = new Promise(function (resolve, reject) {
     module: {
       loaders: join(
         helper.loaders.babel(isHot),
-        helper.loaders.css(isHot),
-        helper.loaders.less(isHot),
-        helper.loaders.sass(isHot),
+        helper.loaders.css(isHot, custom.excludeStyleModule),
+        helper.loaders.less(isHot, custom.excludeStyleModule),
+        helper.loaders.sass(isHot, custom.excludeStyleModule),
         helper.loaders.json(),
         helper.loaders.source(),
         custom.loaders

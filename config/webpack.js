@@ -1,3 +1,5 @@
+// const path = require('path')
+
 // 生成页面的 title
 exports.title = `gem-mine's world`
 
@@ -28,6 +30,9 @@ exports.plugins = []
 // 只需要写文件文件名即可，会在 vendor 构造时进行拷贝
 // 引用请自行修改 public/index.html 进行处理
 exports.additional = []
+
+// 不需要进行样式模块化的文件或目录（node_modules、styles 目录不会进行样式模块化）
+exports.excludeStyleModule = []
 
 // webpack 处理完毕后的回调处理
 exports.done = function () {}
