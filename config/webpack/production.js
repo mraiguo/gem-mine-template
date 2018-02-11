@@ -15,9 +15,9 @@ const config = {
   module: {
     loaders: join(
       helper.loaders.babel(),
-      helper.loaders.css(),
-      helper.loaders.less(),
-      helper.loaders.sass(),
+      helper.loaders.css(false, custom.excludeStyleModule),
+      helper.loaders.less(false, custom.excludeStyleModule),
+      helper.loaders.sass(false, custom.excludeStyleModule),
       helper.loaders.source(),
       custom.loaders
     )
