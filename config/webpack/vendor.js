@@ -1,6 +1,9 @@
 const path = require('path')
-const { helper, BUILD, setFileVersion } = require('./helper')
+const { BUILD } = require('./constant')
+const { helper, copyFileToDist, join } = require('./helper')
 const cfg = require('../webpack')
+
+const production = process.env.MODE === 'production'
 
 const config = {
   entry: {
@@ -12,15 +15,14 @@ const config = {
   module: {
     loaders: [helper.loaders.babel()]
   },
-  plugins: [
-    helper.plugins.define('production'),
+  plugins: join(
+    helper.plugins.define(process.env.MODE),
     helper.plugins.dll(),
-    helper.plugins.uglify(),
+    production ? helper.plugins.uglify() : undefined,
     helper.plugins.done(function () {
-      const dist = path.resolve(BUILD, 'vendor.js')
-      setFileVersion(dist)
+      copyFileToDist(path.resolve(BUILD, 'vendor.js'), BUILD, true, cfg.staticHash)
     })
-  ]
+  )
 }
 
 module.exports = config
