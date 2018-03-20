@@ -23,6 +23,15 @@ try {
 }
 
 const { ROOT, NODE_MODULES, SRC, BUILD, PUBLIC, CONFIG, STYLE } = constant
+const { MODE } = process.env
+
+let SOURCE_IN_HTML_PUBLIC_PATH
+const isLocal = MODE === 'dev'
+if (isLocal) {
+  SOURCE_IN_HTML_PUBLIC_PATH = ''
+} else {
+  SOURCE_IN_HTML_PUBLIC_PATH = config.publicPath
+}
 
 function exec(cmd) {
   execSync(cmd, {}).toString()
@@ -285,7 +294,7 @@ const helper = {
         {
           path: BUILD,
           filename: `[name]${config.staticHash ? '-[hash]' : ''}.js`,
-          publicPath: config.publicPath
+          publicPath: SOURCE_IN_HTML_PUBLIC_PATH
         },
         params
       )
