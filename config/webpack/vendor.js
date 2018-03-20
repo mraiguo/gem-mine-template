@@ -17,7 +17,7 @@ const config = {
     postLoaders: [helper.loaders.es3ify()]
   },
   plugins: join(
-    helper.plugins.define(process.env.MODE),
+    helper.plugins.define('production'),
     helper.plugins.dll(),
     production ? helper.plugins.uglify() : undefined,
     helper.plugins.done(function () {
