@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.1.0",
   "description": "",
-  "browserslist": ["last 2 versions", "ie>=9"],
+  "browserslist": [
+    "last 2 versions",
+    "ie>=9"
+  ],
   "dependencies": {
     "cat-eye": "next"
   },
@@ -20,7 +23,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "cache-loader": "^1.2.0",
     "chalk": "^2.3.0",
-    "clean-webpack-plugin": "^0.1.16",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
     "css-split-webpack-plugin": "^0.2.5",
@@ -62,7 +64,6 @@
     "build": "cross-env MODE=production webpack",
     "vendor": "cross-env MODE=vendor webpack",
     "polyfill": "cross-env MODE=polyfill webpack",
-    "lint":
-      "stylelint --fix 'src/**/*.css' & stylelint --fix 'src/**/*.scss' & stylelint --fix 'src/**/*.less' & eslint --fix --ext .js config src"
+    "lint": "stylelint --fix 'src/**/*.css' & stylelint --fix 'src/**/*.scss' & stylelint --fix 'src/**/*.less' & eslint --fix --ext .js config src"
   }
 }

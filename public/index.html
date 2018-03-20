@@ -6,12 +6,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-  <% for(var index in htmlWebpackPlugin.files.chunks.main.css) {%>
-    <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>" />
-  <%}%>
-    <script>if (typeof Symbol !== 'function' || typeof Set !== 'function') { document.write('<script src="./polyfill.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
-    <script>if (typeof Promise !== 'function') { document.write('<script src="./polyfill-promise.js?<%= htmlWebpackPlugin.options.polyfill %>"><\/script>'); }</script>
-    <script src="./vendor.js?<%= htmlWebpackPlugin.options.vendor %>"></script>
+  <link rel="shortcut icon" href="<%= htmlWebpackPlugin.options.prefix %>favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="<%= htmlWebpackPlugin.options.prefix %>favicon.ico" type="image/x-icon" />
+  <% for(var index in htmlWebpackPlugin.files.chunks.main.css) { %>
+    <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>"/>
+  <% } %>
+  <% if(htmlWebpackPlugin.options.staticHash) { %>
+    <!--[if lte IE 9]><script src="<%= htmlWebpackPlugin.options.prefix %>polyfill-ie8-<%=htmlWebpackPlugin.options.files['polyfill-ie8'].hash%>.js"></script><![endif]-->
+    <script>if (typeof Symbol !== 'function' || typeof Set !== 'function') { document.write('<script src="<%= htmlWebpackPlugin.options.prefix %>polyfill-<%=htmlWebpackPlugin.options.files.polyfill.hash%>.js"><\/script>'); }</script>
+    <script>if (typeof Promise !== 'function') { document.write('<script src="<%= htmlWebpackPlugin.options.prefix %>polyfill-promise-<%=htmlWebpackPlugin.options.files["polyfill-promise"].hash%>.js"><\/script>'); }</script>
+    <script src="<%= htmlWebpackPlugin.options.prefix %>vendor-<%=htmlWebpackPlugin.options.files.vendor.hash%>.js"></script>
+  <% } else { %> 
+    <!--[if lte IE 9]><script src="<%= htmlWebpackPlugin.options.prefix %>polyfill-ie8.js"></script><![endif]-->
+    <script>if (typeof Symbol !== 'function' || typeof Set !== 'function') { document.write('<script src="<%= htmlWebpackPlugin.options.prefix %>polyfill.js"><\/script>'); }</script>
+    <script>if (typeof Promise !== 'function') { document.write('<script src="<%= htmlWebpackPlugin.options.prefix %>polyfill-promise.js"><\/script>'); }</script>
+    <script src="<%= htmlWebpackPlugin.options.prefix %>vendor.js"></script>
+  <% } %>
   <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 

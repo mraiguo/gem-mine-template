@@ -1,9 +1,10 @@
 const path = require('path')
-const { SRC, helper, preBuild, join } = require('./helper')
+const { SRC } = require('./constant')
+const { helper, preBuild, join } = require('./helper')
 const shouldAnalyzer = !!process.env.npm_config_analyzer
 const custom = require('../webpack')
 
-const version = preBuild()
+const files = preBuild()
 
 const config = {
   entry: {
@@ -26,7 +27,6 @@ const config = {
     helper.plugins.define('production', {
       DEBUG: false
     }),
-    helper.plugins.clean(),
     helper.plugins.scopeHosting(),
     helper.plugins.dllReference(),
     helper.plugins.extractCss(),
@@ -35,9 +35,9 @@ const config = {
     helper.plugins.html(
       Object.assign(
         {
-          minify: true
-        },
-        version
+          minify: true,
+          files
+        }
       )
     ),
     custom.plugins,

@@ -7,12 +7,12 @@ const execSync = require('child_process').execSync
 
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
 const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const DonePlugin = require('./plugins/done')
+const constant = require('./constant')
 
 const config = require('../webpack')
 let proxy
@@ -22,27 +22,7 @@ try {
   proxy = {}
 }
 
-const ROOT = path.resolve(__dirname, '../../')
-const NM = 'node_modules'
-const NODE_MODULES = path.resolve(ROOT, NM)
-const SRC = path.resolve(ROOT, 'src')
-const BUILD = config.buildPath || path.resolve(ROOT, 'build')
-const PUBLIC = path.resolve(ROOT, 'public')
-const CONFIG = path.resolve(ROOT, 'config')
-const STYLE = path.resolve(SRC, 'styles')
-const BUNDLE = path.resolve(BUILD, 'bundle')
-
-const { MODE } = process.env
-
-const DEFAULT_PUBLIC_PATH = './'
-// jsx 编译后的 js 是被 html 引入，html 在 bundle 的上一级
-let SOURCE_IN_HTML_PUBLIC_PATH
-const isLocal = MODE === 'dev'
-if (isLocal) {
-  SOURCE_IN_HTML_PUBLIC_PATH = ''
-} else {
-  SOURCE_IN_HTML_PUBLIC_PATH = config.publicPath || DEFAULT_PUBLIC_PATH + 'bundle/'
-}
+const { ROOT, NODE_MODULES, SRC, BUILD, PUBLIC, CONFIG, STYLE } = constant
 
 function exec(cmd) {
   execSync(cmd, {}).toString()
@@ -69,17 +49,63 @@ function getFileMD5(path) {
   return md5
 }
 
-function setFileVersion(dist) {
+function copyFileToDist(file, distDir, removeSource, genHash = true) {
+  const ext = path.extname(file)
+  const fileName = path.basename(file, ext)
   const versionFilePath = path.resolve(BUILD, 'version.json')
+  const hash = getFileMD5(file)
+
+  let shouldUpdate = false
+  let shouldCopy = true
   let data
+  const result = { hash, ext }
   if (fs.existsSync(versionFilePath)) {
-    data = require(versionFilePath)
+    data = fs.readJSONSync(versionFilePath)
+    let res = data[fileName]
+    if (res) {
+      if (res.hash !== hash) {
+        res = result
+        shouldUpdate = true
+      } else {
+        shouldCopy = false
+      }
+    } else {
+      res = result
+      shouldCopy = false
+      shouldUpdate = true
+    }
+    data[fileName] = res
   } else {
-    data = {}
+    data = {
+      [fileName]: result
+    }
+    shouldCopy = true
+    shouldUpdate = true
   }
-  const key = path.basename(dist, path.extname(dist))
-  data[key] = getFileMD5(dist)
-  fs.writeFileSync(versionFilePath, JSON.stringify(data, null, 2))
+
+  let dist
+
+  if (genHash) {
+    dist = path.resolve(distDir, `${fileName}-${hash}${ext}`)
+  } else {
+    dist = path.resolve(distDir, `${fileName}${ext}`)
+  }
+  if (!fs.existsSync(dist)) {
+    shouldCopy = true
+  } else if (dist === file) {
+    shouldCopy = false
+    removeSource = false
+  }
+
+  if (shouldCopy) {
+    fs.copySync(file, dist)
+  }
+  if (shouldUpdate) {
+    fs.writeJSONSync(versionFilePath, data)
+  }
+  if (removeSource) {
+    fs.removeSync(file)
+  }
 }
 
 function join() {
@@ -95,6 +121,20 @@ function join() {
     }
   }
   return result
+}
+
+function clean(params = {}) {
+  let p
+  if (params.path) {
+    p = params.path
+    delete params.path
+  } else {
+    p = BUILD
+  }
+  if (fs.existsSync(p)) {
+    console.log(chalk.cyan(`> clean dist: ${p}`))
+    fs.removeSync(p)
+  }
 }
 
 function loadStyle(hot, type, exclude) {
@@ -176,6 +216,7 @@ function loadStyle(hot, type, exclude) {
         ? loaders.exclude.hot
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
+          publicPath: config.publicPath,
           use: loaders.exclude.extract
         })
     },
@@ -186,6 +227,7 @@ function loadStyle(hot, type, exclude) {
         ? loaders.include.hot
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
+          publicPath: config.publicPath,
           use: loaders.include.extract
         })
     }
@@ -223,34 +265,16 @@ function getIP() {
 }
 
 function preBuild() {
-  let version
-  let versionFile = path.resolve(BUILD, 'version.json')
-  let buildVendor = !!process.env.npm_config_vendor
-  let buildPolyfill = !!process.env.npm_config_polyfill
-  if (!fs.existsSync(path.resolve(ROOT, 'manifest.json'))) {
-    buildVendor = true
-  }
-  if (!fs.existsSync(versionFile)) {
-    buildVendor = true
-    buildPolyfill = true
-  }
+  clean()
+  let files
 
-  if (buildVendor || buildPolyfill) {
-    if (buildVendor && buildPolyfill) {
-      console.log(chalk.cyan('> build polyfill && vendor'))
-      exec('npm run polyfill && npm run vendor')
-    } else {
-      if (buildPolyfill) {
-        console.log(chalk.cyan('> build polyfill'))
-        exec('npm run polyfill')
-      } else {
-        console.log(chalk.cyan('> build vendor'))
-        exec('npm run vendor')
-      }
-    }
-  }
-  version = JSON.parse(fs.readFileSync(versionFile).toString())
-  return version
+  console.log(chalk.cyan('> build polyfill && vendor'))
+  exec('npm run polyfill && npm run vendor')
+
+  let versionFile = path.resolve(BUILD, 'version.json')
+
+  files = JSON.parse(fs.readFileSync(versionFile).toString())
+  return files
 }
 
 const helper = {
@@ -259,9 +283,9 @@ const helper = {
     hash: function (params = {}) {
       return Object.assign(
         {
-          path: BUNDLE,
-          filename: '[name]-[hash].js',
-          publicPath: SOURCE_IN_HTML_PUBLIC_PATH
+          path: BUILD,
+          filename: `[name]${config.staticHash ? '-[hash]' : ''}.js`,
+          publicPath: config.publicPath
         },
         params
       )
@@ -320,7 +344,7 @@ const helper = {
   resolve: function () {
     const params = config.resolve || {}
     const obj = {
-      modules: [NM],
+      modules: [NODE_MODULES],
       extensions: ['.js', '.jsx', '.css', '.less', '.scss'],
       alias: {
         config: CONFIG,
@@ -347,7 +371,7 @@ const helper = {
   resolveLoader: function (params = {}) {
     return Object.assign(
       {
-        modules: [NM]
+        modules: [NODE_MODULES]
       },
       params
     )
@@ -379,10 +403,12 @@ const helper = {
       const obj = Object.assign(
         {
           template: path.resolve(PUBLIC, 'index.html'),
-          filename: isLocal ? 'index.html' : '../index.html',
+          filename: 'index.html',
           inject: false,
           showErrors: true,
-          title: config.title
+          title: config.title,
+          staticHash: config.staticHash,
+          prefix: config.publicPath
         },
         params
       )
@@ -430,30 +456,14 @@ const helper = {
         sourceMap
       })
     },
-    clean: function (params = {}) {
-      const p = params.path || [path.resolve(BUILD, 'bundle')]
-      delete params.path
-
-      return new CleanWebpackPlugin(
-        p,
-        Object.assign(
-          {
-            root: ROOT,
-            exclude: [],
-            verbose: true,
-            dry: false
-          },
-          params
-        )
-      )
-    },
     browser: function (url) {
       return new OpenBrowserPlugin({ url })
     },
     extractCss: function () {
       return new ExtractTextPlugin({
-        filename: '[name].[contenthash].css',
-        allChunks: true
+        filename: `[name]${config.staticHash ? '.[contenthash]' : ''}.css`,
+        allChunks: true,
+        publicPath: config.publicPath
       })
     },
     analyzer: function () {
@@ -461,16 +471,20 @@ const helper = {
     },
     done: function (callback) {
       return new DonePlugin(function () {
-        if (callback) {
-          callback(exports, config)
-        }
         if (config.additional) {
           config.additional.forEach(function (name) {
             fs.copySync(`${PUBLIC}/${name}`, `${BUILD}/${name}`)
           })
         }
+        const fav = 'favicon.ico'
+        if (fs.existsSync(path.resolve(PUBLIC, fav))) {
+          fs.copySync(`${PUBLIC}/${fav}`, `${BUILD}/${fav}`)
+        }
         if (config.done) {
           config.done(exports, config)
+        }
+        if (callback) {
+          callback(exports, config)
         }
       })
     }
@@ -514,15 +528,10 @@ const helper = {
   }
 }
 
-exports.ROOT = ROOT
-exports.NODE_MODULES = NODE_MODULES
-exports.SRC = SRC
-exports.BUILD = BUILD
-exports.PUBLIC = PUBLIC
 exports.helper = helper
 exports.exec = exec
 exports.concat = concat
 exports.getFileMD5 = getFileMD5
-exports.setFileVersion = setFileVersion
+exports.copyFileToDist = copyFileToDist
 exports.join = join
 exports.preBuild = preBuild

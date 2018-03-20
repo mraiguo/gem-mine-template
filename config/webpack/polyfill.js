@@ -1,5 +1,7 @@
-const fs = require('fs-extra')
-const { helper, BUILD, PUBLIC } = require('./helper')
+const path = require('path')
+const { BUILD, PUBLIC } = require('./constant')
+const { helper, copyFileToDist } = require('./helper')
+const cfg = require('../webpack')
 
 const config = {
   entry: {
@@ -13,7 +15,9 @@ const config = {
   plugins: [
     helper.plugins.uglify(),
     helper.plugins.done(function () {
-      fs.copySync(`${PUBLIC}/polyfill-promise.js`, `${BUILD}/polyfill-promise.js`)
+      copyFileToDist(path.resolve(BUILD, 'polyfill.js'), BUILD, true, cfg.staticHash)
+      copyFileToDist(path.resolve(PUBLIC, 'polyfill-ie8.js'), BUILD, false, cfg.staticHash)
+      copyFileToDist(path.resolve(PUBLIC, 'polyfill-promise.js'), BUILD, false, cfg.staticHash)
     })
   ]
 }
