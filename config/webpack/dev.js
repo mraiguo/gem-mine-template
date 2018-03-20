@@ -1,14 +1,14 @@
 const path = require('path')
 const detect = require('detect-port')
 const chalk = require('chalk')
-const { helper, SRC, join, preBuild } = require('./helper')
+const { SRC } = require('./constant')
+const { helper, join, preBuild } = require('./helper')
+const custom = require('../webpack')
 
 const isHot = process.env.npm_config_hot !== ''
 const shouldAnalyzer = !!process.env.npm_config_analyzer
 
-const custom = require('../webpack')
-
-const version = preBuild()
+const files = preBuild()
 
 const configPromise = new Promise(function (resolve, reject) {
   const config = {
@@ -40,7 +40,7 @@ const configPromise = new Promise(function (resolve, reject) {
       helper.plugins.dllReference(),
       helper.plugins.extractCss(),
       helper.plugins.splitCss(),
-      helper.plugins.html(Object.assign(version)),
+      helper.plugins.html({ files }, false),
 
       custom.plugins,
       helper.plugins.done()
