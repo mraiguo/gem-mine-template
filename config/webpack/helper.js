@@ -26,15 +26,27 @@ const { ROOT, NODE_MODULES, SRC, BUILD, PUBLIC, CONFIG, STYLE } = constant
 const { MODE } = process.env
 
 let SOURCE_IN_HTML_PUBLIC_PATH
-const isLocal = MODE === 'dev'
-if (isLocal) {
+const isDev = MODE === 'dev'
+if (isDev) {
   SOURCE_IN_HTML_PUBLIC_PATH = ''
 } else {
   SOURCE_IN_HTML_PUBLIC_PATH = config.publicPath
 }
 
-function exec(cmd) {
-  execSync(cmd, {}).toString()
+function exec(cmd, ext) {
+  if (ext === false) {
+    return execSync(cmd, {})
+      .toString()
+      .trim()
+  } else {
+    if (ext && ext.silent) {
+      const params = Object.assign({}, ext)
+      return execSync(cmd, params)
+    } else {
+      const params = Object.assign({ stdio: [process.stdin, process.stdout, process.stderr] }, ext)
+      return execSync(cmd, params)
+    }
+  }
 }
 
 function concat(sources, dist) {
@@ -230,7 +242,11 @@ function preBuild() {
   let files
 
   console.log(chalk.cyan('> build polyfill && vendor'))
-  exec('npm run polyfill && npm run vendor')
+  const env = Object.assign({}, process.env, {
+    isDev
+  })
+  exec(`npm run polyfill`, { env })
+  exec(`npm run vendor`, { env })
 
   let versionFile = path.resolve(BUILD, 'version.json')
 

@@ -3,7 +3,7 @@ const { BUILD } = require('./constant')
 const { helper, copyFileToDist, join } = require('./helper')
 const cfg = require('../webpack')
 
-const production = process.env.MODE === 'production'
+const isDev = process.env.isDev === 'true'
 
 const config = {
   entry: {
@@ -17,9 +17,9 @@ const config = {
     postLoaders: [helper.loaders.es3ify()]
   },
   plugins: join(
-    helper.plugins.define('production'),
+    helper.plugins.define(isDev ? 'dev' : 'production'),
     helper.plugins.dll(),
-    production ? helper.plugins.uglify() : undefined,
+    isDev ? undefined : helper.plugins.uglify(),
     helper.plugins.done(function () {
       copyFileToDist(path.resolve(BUILD, 'vendor.js'), BUILD, true, cfg.staticHash)
     })
