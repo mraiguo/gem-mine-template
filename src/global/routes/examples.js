@@ -1,12 +1,12 @@
 import Container from 'components/examples'
 import List from 'components/examples/List'
 import Constant from 'components/examples/constant'
-import Counter from 'components/examples/counter'
-import X from 'components/examples/permission/X'
 import Y from 'components/examples/permission/Y'
 import Request from 'components/examples/request'
 import Params from 'components/examples/params'
 import UI from 'components/examples/ui'
+
+import asyncLoad from 'global/util/async-load'
 
 export default {
   path: '/examples',
@@ -26,7 +26,7 @@ export default {
     },
     action: {
       path: '/action',
-      component: Counter,
+      component: asyncLoad('examples/counter'),
       description: 'action使用例子'
     },
     params: {
@@ -49,7 +49,7 @@ export default {
       module: {
         x: {
           path: '/x',
-          component: X
+          component: asyncLoad('examples/permission/X')
         },
         y: {
           path: '/y',
