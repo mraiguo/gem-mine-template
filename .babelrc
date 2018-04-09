@@ -6,6 +6,8 @@
   ],
   "plugins": [
     "transform-object-assign",
+    "syntax-dynamic-import",
+    "dynamic-import-webpack",
     [
       "transform-runtime",
       {

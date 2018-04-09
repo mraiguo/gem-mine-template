@@ -8,13 +8,16 @@
     "ie>=8"
   ],
   "dependencies": {
-    "cat-eye": "^0.3.0"
+    "cat-eye": "^0.3.0",
+    "react-loadable": "^5.3.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.1.2",
     "babel-loader": "^6.4.1",
+    "babel-plugin-dynamic-import-webpack": "^1.0.2",
     "babel-plugin-import": "^1.6.2",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
