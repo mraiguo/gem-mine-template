@@ -2,7 +2,9 @@
 /**
  * 系统全局常量
  */
-// exports.TITLE = 'title';
+// exports.TITLE = 'title'
+
+exports.SUPPORT_IE8 = true
 
 // 请根据 ENV（npm run xxx --env=yyy 得到的 env 值）来设置对应的key，例如下面的 dev、production
 // local 是作为没有提供 ENV 时默认采用
