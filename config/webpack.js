@@ -11,8 +11,24 @@ exports.resolve = {
 // 编译目录配置
 exports.buildPath = path.resolve(__dirname, '../build')
 
-// todo: 静态资源路径配置, 如果有 cdn 支持，可以配置到 cdn，对本地开发无效
+// 静态资源路径配置
+// 如果配置了 cdn 并且生效，则此路径无效，会使用 cdn 的路径（cd.host + '/' + cdn.params.path）作为 publicPath
 exports.publicPath = './'
+
+// const { QINIU_KEY: key, QINIU_SECRET: secret } = process.env
+// exports.cdn = {
+//   env: ['production'], // 在哪些环境中启用 cdn，npm_config_env 的值（通过 --env=production 指定）
+//   package: 'gem-mine-cdn-qiniu', // cdn 的包，可以自己实现，默认提供了 七牛（gem-mine-cdn-qiniu）、OSS（gem-mine-cdn-oss）、CS（gem-mine-cdn-cs） 方案
+//   host: 'http://dn-tomjoke.qbox.me', // cdn 的域名
+//   // cdn 的参数，作为参数被上面实现的包接收
+//   params: {
+//     bucket: 'tomjoke',
+//     key, // access_key
+//     secret, // access_secret
+//     path: 'static', // 七牛存储对应的路径
+//     uploadMapFile: false // 是否上传 map 文件
+//   }
+// }
 
 // 加入 vendor 公共包的库
 exports.vendor = []

@@ -237,7 +237,7 @@ function loadStyle(hot, type, exclude) {
         ? loaders.exclude.hot
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
-          publicPath: config.publicPath,
+          publicPath,
           use: loaders.exclude.extract
         })
     },
@@ -248,7 +248,7 @@ function loadStyle(hot, type, exclude) {
         ? loaders.include.hot
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
-          publicPath: config.publicPath,
+          publicPath,
           use: loaders.include.extract
         })
     }
@@ -433,7 +433,7 @@ const helper = {
           showErrors: true,
           title: config.title,
           staticHash: config.staticHash,
-          prefix: config.publicPath
+          prefix: publicPath
         },
         params
       )
@@ -488,7 +488,7 @@ const helper = {
       return new ExtractTextPlugin({
         filename: `[name]${config.staticHash ? '.[contenthash]' : ''}.css`,
         allChunks: true,
-        publicPath: config.publicPath
+        publicPath
       })
     },
     analyzer: function () {
