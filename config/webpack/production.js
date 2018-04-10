@@ -1,5 +1,5 @@
 const path = require('path')
-const { SRC } = require('./constant')
+const { SRC, BUILD, CDN } = require('./constant')
 const { helper, preBuild, join } = require('./helper')
 const shouldAnalyzer = !!process.env.npm_config_analyzer
 const custom = require('../webpack')
