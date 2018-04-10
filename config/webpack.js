@@ -15,6 +15,7 @@ exports.buildPath = path.resolve(__dirname, '../build')
 // 如果配置了 cdn 并且生效，则此路径无效，会使用 cdn 的路径（cd.host + '/' + cdn.params.path）作为 publicPath
 exports.publicPath = './'
 
+// 七牛 CDN 配置
 // const { QINIU_KEY: key, QINIU_SECRET: secret } = process.env
 // exports.cdn = {
 //   env: ['production'], // 在哪些环境中启用 cdn，npm_config_env 的值（通过 --env=production 指定）
