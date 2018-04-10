@@ -18,7 +18,7 @@ export function asyncLoad(p, preload = true) {
             `你的项目需要支持 IE8，异步路由请使用 function 方式，例如: asyncLoad(() => import('components/examples/counter'))`
           )
         }
-        return import(`../../${p}`)
+        return import(`../../../${p}`)
       }
     },
     loading: Loading,
