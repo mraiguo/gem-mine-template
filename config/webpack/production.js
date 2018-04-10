@@ -33,16 +33,31 @@ const config = {
     helper.plugins.extractCss(),
     helper.plugins.splitCss(),
     helper.plugins.uglify(true),
-    helper.plugins.html(
-      Object.assign(
-        {
-          minify: true,
-          files
-        }
-      )
-    ),
+    helper.plugins.html({
+      minify: true,
+      files
+    }),
     custom.plugins,
-    helper.plugins.done()
+    helper.plugins.done(function () {
+      if (CDN) {
+        console.log('\n 开始进行 CDN 自动化处理')
+        try {
+          const upload = require(custom.cdn.package)
+          const params = Object.assign(
+            {
+              dist: BUILD,
+              complete() {
+                console.log('CDN 处理完毕')
+              }
+            },
+            custom.cdn.params
+          )
+          upload(params)
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    })
   ),
   stats: {
     children: false,
