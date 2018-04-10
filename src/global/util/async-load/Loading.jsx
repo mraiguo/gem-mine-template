@@ -1,7 +1,5 @@
 import React from 'react'
-import Loadable from 'react-loadable'
 
-// loading
 const Loading = ({ isLoading, error }) => {
   if (isLoading) {
     return <div>loading...</div>
@@ -13,11 +11,4 @@ const Loading = ({ isLoading, error }) => {
   }
 }
 
-export default function (path) {
-  return Loadable({
-    loader: () => {
-      return import(`components/${path}`)
-    },
-    loading: Loading
-  })
-}
+export default Loading

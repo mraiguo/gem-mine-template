@@ -23,3 +23,6 @@
 // Make it safe to do console.log() always.
 !function(a){"use strict";var b,c,d,e,f,g;for(a.console||(a.console={}),b=a.console,e=function(){},f=["memory"],g="assert,clear,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info,log,markTimeline,profile,profiles,profileEnd,show,table,time,timeEnd,timeline,timelineEnd,timeStamp,trace,warn".split(",");c=f.pop();)b[c]||(b[c]={});for(;d=g.pop();)b[d]||(b[d]=e)}("undefined"==typeof window?this:window);
 
+// addEventListener/removeEventListener polyfill
+// https://gist.github.com/finom/3ecfcea07d95f5dd7f8a
+window.addEventListener=window.addEventListener||function(a,b){window.attachEvent("on"+a,b)},window.removeEventListener=window.removeEventListener||function(a,b){window.detachEvent("on"+a,b)};
