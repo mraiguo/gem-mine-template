@@ -21,15 +21,22 @@ try {
   proxy = {}
 }
 
-const { ROOT, NODE_MODULES, SRC, BUILD, PUBLIC, CONFIG, STYLE } = constant
+const { ROOT, NODE_MODULES, SRC, BUILD, PUBLIC, CONFIG, STYLE, CDN } = constant
 const { MODE } = process.env
+
+let publicPath
+if (CDN) {
+  publicPath = `${config.cdn.host.replace(/\/+$/, '')}/${config.cdn.params.path.replace(/^\//, '').replace(/\/+$/, '')}/`
+} else {
+  publicPath = config.publicPath
+}
 
 let SOURCE_IN_HTML_PUBLIC_PATH
 const isDev = MODE === 'dev'
 if (isDev) {
   SOURCE_IN_HTML_PUBLIC_PATH = ''
 } else {
-  SOURCE_IN_HTML_PUBLIC_PATH = config.publicPath
+  SOURCE_IN_HTML_PUBLIC_PATH = publicPath
 }
 
 function exec(cmd, ext) {
@@ -236,7 +243,7 @@ function loadStyle(hot, type, exclude) {
         ? loaders.exclude.hot
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
-          publicPath: config.publicPath,
+          publicPath,
           use: loaders.exclude.extract
         })
     },
@@ -247,7 +254,7 @@ function loadStyle(hot, type, exclude) {
         ? loaders.include.hot
         : ExtractTextPlugin.extract({
           fallback: styleLoader,
-          publicPath: config.publicPath,
+          publicPath,
           use: loaders.include.extract
         })
     }
@@ -429,7 +436,7 @@ const helper = {
           showErrors: true,
           title: config.title,
           staticHash: config.staticHash,
-          prefix: config.publicPath
+          prefix: publicPath
         },
         params
       )
@@ -482,8 +489,9 @@ const helper = {
     },
     extractCss: function () {
       return new ExtractTextPlugin({
-        filename: '[name].[contenthash].css',
-        allChunks: true
+        filename: `[name]${config.staticHash ? '.[contenthash]' : ''}.css`,
+        allChunks: true,
+        publicPath
       })
     },
     analyzer: function () {
