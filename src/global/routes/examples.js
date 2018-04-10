@@ -1,4 +1,4 @@
-import asyncLoad from 'global/util/async-load'
+import { asyncLoad } from 'global/util/async-load'
 
 import Container from 'components/examples'
 import List from 'components/examples/List'
