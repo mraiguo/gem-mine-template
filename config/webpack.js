@@ -16,6 +16,7 @@ exports.buildPath = path.resolve(__dirname, '../build')
 exports.publicPath = './'
 
 // 七牛 CDN 配置
+// 开启前请安装依赖包，执行：npm i gem-mine-cdn-qiniu -D
 // const { QINIU_KEY: key, QINIU_SECRET: secret } = process.env
 // exports.cdn = {
 //   env: ['production'], // 在哪些环境中启用 cdn，npm_config_env 的值（通过 --env=production 指定）
