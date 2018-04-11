@@ -271,7 +271,7 @@ const helper = {
       return Object.assign(
         {
           path: BUILD,
-          filename: `[name]${config.staticHash ? '-[chunkhash]' : ''}.js`,
+          filename: `[name]${config.staticHash ? '-[hash]' : ''}.js`,
           chunkFilename: `[name].[chunkhash].js`,
           publicPath: SOURCE_IN_HTML_PUBLIC_PATH
         },
