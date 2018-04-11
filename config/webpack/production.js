@@ -27,6 +27,7 @@ const config = {
     helper.plugins.define('production', {
       DEBUG: false
     }),
+    helper.plugins.md5hash(),
     helper.plugins.scopeHosting(),
     helper.plugins.dllReference(),
     helper.plugins.extractCss(),
