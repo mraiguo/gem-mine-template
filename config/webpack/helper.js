@@ -11,6 +11,7 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const WebpackMd5Hash = require('webpack-md5-hash')
 const DonePlugin = require('./plugins/done')
 const constant = require('./constant')
 
@@ -27,7 +28,9 @@ const { MODE } = process.env
 
 let publicPath
 if (CDN) {
-  publicPath = `${config.cdn.host.replace(/\/+$/, '')}/${config.cdn.params.path.replace(/^\//, '').replace(/\/+$/, '')}/`
+  publicPath = `${config.cdn.host.replace(/\/+$/, '')}/${config.cdn.params.path
+    .replace(/^\//, '')
+    .replace(/\/+$/, '')}/`
 } else {
   publicPath = config.publicPath
 }
@@ -316,7 +319,8 @@ const helper = {
       return Object.assign(
         {
           path: BUILD,
-          filename: `[name]${config.staticHash ? '-[hash]' : ''}.js`,
+          filename: `[name]${config.staticHash ? '-[chunkhash]' : ''}.js`,
+          chunkFilename: `[name].[chunkhash].js`,
           publicPath: SOURCE_IN_HTML_PUBLIC_PATH
         },
         params
@@ -500,6 +504,9 @@ const helper = {
     },
     analyzer: function () {
       return new BundleAnalyzerPlugin()
+    },
+    md5hash: function () {
+      return new WebpackMd5Hash()
     },
     done: function (callback) {
       return new DonePlugin(function () {
