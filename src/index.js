@@ -1,4 +1,5 @@
 import React from 'react'
+import 'global/util/react-patch'
 import { render, Router } from 'cat-eye'
 import { importAll } from 'global/util/sys'
 import 'global/cat-eye'
