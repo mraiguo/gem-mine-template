@@ -71,6 +71,6 @@
     "build": "cross-env MODE=production webpack",
     "vendor": "cross-env MODE=vendor webpack",
     "polyfill": "cross-env MODE=polyfill webpack",
-    "lint": "stylelint --fix 'src/**/*.css' & stylelint --fix 'src/**/*.scss' & stylelint --fix 'src/**/*.less' & eslint --fix --ext .js config src"
+    "lint": "stylelint --fix \"src/**/*.css\" & stylelint --fix \"src/**/*.scss\" & stylelint --fix \"src/**/*.less\" & eslint --fix --ext .js config src"
   }
 }
