@@ -7,7 +7,7 @@ const isDev = process.env.isDev === 'true'
 
 const config = {
   entry: {
-    vendor: ['react', 'react-dom', 'prop-types', 'cat-eye'].concat(cfg.vendor)
+    vendor: ['react', 'react-dom', 'prop-types', 'create-react-class', 'cat-eye'].concat(cfg.vendor)
   },
   output: helper.output.lib(),
   resolve: helper.resolve(),
