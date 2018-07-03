@@ -58,7 +58,7 @@ const config = {
           console.log(e)
         }
       }
-    })
+    }, true)
   ),
   stats: {
     children: false,

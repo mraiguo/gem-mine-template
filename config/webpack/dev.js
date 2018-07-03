@@ -1,8 +1,7 @@
 const path = require('path')
 const detect = require('detect-port')
-const chalk = require('chalk')
 const { SRC } = require('./constant')
-const { helper, join, preBuild } = require('./helper')
+const { helper, join, preBuild, print } = require('./helper')
 const custom = require('../webpack')
 
 const isHot = process.env.npm_config_hot !== ''
@@ -43,7 +42,7 @@ const configPromise = new Promise(function (resolve, reject) {
       helper.plugins.html({ files }, false),
 
       custom.plugins,
-      helper.plugins.done()
+      helper.plugins.done(null, true)
     ),
     stats: {
       children: false,
@@ -62,7 +61,7 @@ const configPromise = new Promise(function (resolve, reject) {
   detect(port)
     .then(function (p) {
       if (port !== p) {
-        console.log(chalk.cyanBright(`warning: port ${port} has been used, will use the ${p} instead.\n`))
+        print.warning(`warning: port ${port} has been used, will use the ${p} instead.\n`)
         port = p
       }
       const devServer = helper.devServer(isHot, port)
