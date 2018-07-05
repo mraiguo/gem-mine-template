@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { Form, Input, Tooltip, Select, Button, DatePicker, message } from 'fish'
+import { Form, Input, Button, DatePicker, message } from 'fish'
 
 const FormItem = Form.Item
-const Option = Select.Option
 
 class UiForm extends Component {
   handleSubmit = e => {
