@@ -4,7 +4,6 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const WebpackMd5Hash = require('webpack-md5-hash')
 const DonePlugin = require('../plugins/done')
@@ -33,9 +32,6 @@ module.exports = {
   },
   hot: function () {
     return new webpack.HotModuleReplacementPlugin()
-  },
-  splitCss: function () {
-    return new CSSSplitWebpackPlugin({ size: 4000 })
   },
   html: function (params = {}) {
     const obj = Object.assign(
