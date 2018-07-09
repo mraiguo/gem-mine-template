@@ -1,7 +1,7 @@
 {
   "name": "project_name",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.8.5",
   "description": "",
   "browserslist": ["last 2 versions"],
   "dependencies": {
