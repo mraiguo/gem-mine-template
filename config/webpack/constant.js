@@ -1,5 +1,6 @@
 const path = require('path')
 const config = require('../webpack')
+const { SDP_PREFIX } = require('gem-mine-helper')
 
 const ROOT = path.resolve(__dirname, '../../')
 const NM = 'node_modules'
@@ -20,8 +21,6 @@ if (config.cdn) {
 
 const GEM_MINE_DOC = 'http://gem-mine.club'
 const GEM_MINE_DOC_VERSION = `${GEM_MINE_DOC}/#/docs/version`
-const SDP_PREFIX = '@sdp.nd/'
-const ND_NPM = 'http://registry.npm.sdp.nd'
 const UI_DOC = {
   [`${SDP_PREFIX}/fish`]: 'http://fish-docs.sdp.101.com/changelog-cn',
   [`${SDP_PREFIX}/fish-mobile`]: 'http://fish-design-mobile.sdp.101.com/changelog-cn',
@@ -40,5 +39,4 @@ exports.CDN = CDN
 exports.GEM_MINE_DOC = GEM_MINE_DOC
 exports.GEM_MINE_DOC_VERSION = GEM_MINE_DOC_VERSION
 exports.SDP_PREFIX = SDP_PREFIX
-exports.ND_NPM = ND_NPM
 exports.UI_DOC = UI_DOC
