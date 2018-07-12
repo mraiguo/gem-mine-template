@@ -92,5 +92,7 @@ module.exports = function () {
     message += `请执行 ${chalk.yellow('gem-mine update')} 进行更新`
   }
 
-  printBox({ message })
+  setTimeout(function () {
+    printBox({ text: message })
+  }, 100)
 }
