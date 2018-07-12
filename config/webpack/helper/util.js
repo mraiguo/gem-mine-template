@@ -1,33 +1,10 @@
-const { readJsonSync, writeJsonSync } = require('fs-extra')
+const { readJSON } = require('gem-mine-helper')
 const os = require('os')
-const { exec } = require('./cmd')
-
-exports.readJSON = readJsonSync
-exports.writeJSON = function (path, object) {
-  return writeJsonSync(path, object, {
-    spaces: 2
-  })
-}
-
-exports.getIn = function (obj, path) {
-  let result = obj
-  if (path) {
-    const arr = path.split('.')
-    for (let i = 0; i < arr.length; i += 1) {
-      const key = arr[i].trim()
-      if (result === undefined) {
-        return result
-      }
-      result = result[key]
-    }
-  }
-  return result
-}
 
 exports.getConfig = function (path) {
   let config
   try {
-    config = readJsonSync(path)
+    config = readJSON(path)
   } catch (e) {
     config = {}
   }
@@ -76,11 +53,4 @@ exports.getIP = function () {
     }
   }
   return host
-}
-
-exports.checkNpmRegistry = function () {
-  const registry = exec('npm config get registry', false)
-  if (registry.indexOf('registry.npmjs.org') > -1) {
-    exec('npm config set registry https://registry.npm.taobao.org')
-  }
 }

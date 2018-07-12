@@ -1,7 +1,8 @@
 const path = require('path')
 const detect = require('detect-port')
+const { log } = require('gem-mine-helper')
 const { SRC } = require('./constant')
-const { helper, join, preBuild, print } = require('./helper')
+const { helper, join, preBuild } = require('./helper')
 const custom = require('../webpack')
 
 const isHot = process.env.npm_config_hot !== ''
@@ -59,7 +60,7 @@ const configPromise = new Promise(function (resolve, reject) {
   detect(port)
     .then(function (p) {
       if (port !== p) {
-        print.warning(`warning: port ${port} has been used, will use the ${p} instead.\n`)
+        log.warning(`warning: port ${port} has been used, will use the ${p} instead.\n`)
         port = p
       }
       const devServer = helper.devServer(isHot, port)
