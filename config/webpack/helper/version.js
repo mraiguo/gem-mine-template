@@ -7,7 +7,7 @@ const {
   checkUIVersion: _checkUIVersion,
   checkClassicVersion: _checkClassicVersion
 } = require('gem-mine-helper')
-const { ROOT, GEM_MINE_DOC, GEM_MINE_DOC_VERSION } = require('../constant')
+const { ROOT, GEM_MINE_DOC, GEM_MINE_DOC_VERSION, UI_DOC } = require('../constant')
 const { getConfig } = require('./util')
 
 function checkCliVersion() {
@@ -17,12 +17,12 @@ function checkCliVersion() {
       if (remoteVersion && localVersion !== remoteVersion) {
         message = `gem-mine 发现新版本 ${chalk.gray(localVersion)} → ${chalk.yellow(
           remoteVersion
-        )}，请执行 ${chalk.yellow('npm i -g gem-mine')} 进行更新
-版本履历：${chalk.green(GEM_MINE_DOC_VERSION)}`
+        )}，版本履历：${chalk.green(GEM_MINE_DOC_VERSION)}
+请执行 ${chalk.yellow('npm i -g gem-mine')} 进行更新`
       }
     } else {
-      message = `gem-mine 未安装，请执行 ${chalk.yellow('npm i -g gem-mine')} 进行安装
-帮助文档：${chalk.green(GEM_MINE_DOC)}`
+      message = `gem-mine 未安装，帮助文档：${chalk.green(GEM_MINE_DOC)}
+请执行 ${chalk.yellow('npm i -g gem-mine')} 进行安装`
     }
   })
   return message
@@ -32,7 +32,9 @@ function checkTemplateVersion(context) {
   let message
   _checkTemplateVersion(context, function ({ localVersion, remoteVersion }) {
     if (remoteVersion && localVersion !== remoteVersion) {
-      message = `工程代码骨架 发现新版本 ${chalk.gray(localVersion)} → ${chalk.yellow(remoteVersion)}`
+      message = `工程代码骨架 发现新版本 ${chalk.gray(localVersion)} → ${chalk.yellow(
+        remoteVersion
+      )}，版本履历：${chalk.green(`${GEM_MINE_DOC_VERSION}`)}`
     }
   })
   return message
@@ -44,7 +46,12 @@ function checkUIVersion(context) {
   if (ui) {
     _checkUIVersion(context, function ({ localVersion, remoteVersion }) {
       if (remoteVersion && localVersion !== remoteVersion) {
-        message = `UI库(${ui}) 发现新版本 ${chalk.gray(localVersion)} → ${chalk.yellow(remoteVersion)}`
+        const link = UI_DOC[ui]
+        let doc
+        if (link) {
+          doc = `，版本履历：${chalk.green(`${link}`)}`
+        }
+        message = `UI库(${ui}) 发现新版本 ${chalk.gray(localVersion)} → ${chalk.yellow(remoteVersion)}${doc}`
       }
     })
   }
@@ -53,11 +60,15 @@ function checkUIVersion(context) {
 
 function checkClassicVersion(context) {
   let message
-  const { classic_git: git } = context
-  if (git) {
-    _checkClassicVersion(context, function ({ localVersion, remoteVersion }) {
+  const { classic_git: classicGit } = context
+  if (classicGit) {
+    _checkClassicVersion(context, function ({ localVersion, remoteVersion, git, branch }) {
       if (remoteVersion && localVersion !== remoteVersion) {
-        message = `使用的经典代码发现新版本 ${chalk.gray(localVersion)} → ${chalk.yellow(remoteVersion)}`
+        let doc
+        if (git && branch) {
+          doc = `，详情查看：${chalk.green(`${git}/tree/${branch}`)}`
+        }
+        message = `使用的经典代码发现新版本 ${chalk.gray(localVersion)} → ${chalk.yellow(remoteVersion)}${doc}`
       }
     })
   }
@@ -89,7 +100,7 @@ module.exports = function () {
     if (classicInfo) {
       message += `${prefix}${classicInfo}\n`
     }
-    message += `请执行 ${chalk.yellow('gem-mine update')} 进行更新`
+    message += `建议执行 ${chalk.yellow('gem-mine update')} 进行更新`
   }
 
   setTimeout(function () {
