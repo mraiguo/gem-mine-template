@@ -9,8 +9,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const WebpackMd5Hash = require('webpack-md5-hash')
 const DonePlugin = require('../plugins/done')
 const config = require('../../webpack')
-const {ROOT, BUILD, PUBLIC} = require('../constant')
-const {getPublicPath} = require('./source-path')
+const { ROOT, BUILD, PUBLIC } = require('../constant')
+const { getPublicPath } = require('./source-path')
 const detectVerion = require('./version')
 
 const publicPath = getPublicPath(config)

@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const crypto = require('crypto')
 const rd = require('rd')
-const print = require('./print')
+const { log } = require('gem-mine-helper')
 
 exports.concat = function (sources, dist) {
   const dir = path.dirname(dist)
@@ -100,10 +100,10 @@ exports.clean = function ({ dist, excludes }) {
         }
       })
 
-      print.info(`clean dist: ${dist}, exclude: [${excludes}]`)
+      log.info(`clean dist: ${dist}, exclude: [${excludes}]`)
     } else {
       if (fs.existsSync(dist)) {
-        print.info(`clean dist: ${dist}`)
+        log.info(`clean dist: ${dist}`)
         fs.removeSync(dist)
       }
     }

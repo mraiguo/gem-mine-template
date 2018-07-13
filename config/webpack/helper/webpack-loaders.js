@@ -1,11 +1,7 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const {join} = require('./util')
-const {getPublicPath} = require('./source-path')
-const config = require('../../webpack')
-const {NODE_MODULES, STYLE, CONFIG} = require('../constant')
-
-const publicPath = getPublicPath(config)
+const { join } = require('./util')
+const { NODE_MODULES, STYLE, CONFIG } = require('../constant')
 
 function loadStyle(hot, type, exclude) {
   const excludes = join(NODE_MODULES, STYLE, exclude)

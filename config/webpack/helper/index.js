@@ -1,8 +1,7 @@
 const path = require('path')
 const { clean, copyFileToDist } = require('./file')
-const print = require('./print')
-const { exec } = require('./cmd')
-const { readJSON, join, checkNpmRegistry } = require('./util')
+const { exec, autoSetRegistry, readJSON, log } = require('gem-mine-helper')
+const { join } = require('./util')
 const { BUILD } = require('../constant')
 
 const output = require('./webpack-output')
@@ -14,13 +13,13 @@ const devServer = require('./webpack-devServer')
 const { MODE } = process.env
 const isDev = MODE === 'dev'
 
-checkNpmRegistry()
+autoSetRegistry()
 
 exports.preBuild = function () {
   clean({ dist: BUILD })
   let files
 
-  print.info('build polyfill && vendor')
+  log.info('build polyfill && vendor')
   const env = Object.assign({}, process.env, {
     isDev
   })
@@ -40,6 +39,5 @@ exports.helper = {
   devServer
 }
 
-exports.print = print
 exports.join = join
 exports.copyFileToDist = copyFileToDist
