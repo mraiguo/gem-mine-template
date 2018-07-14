@@ -106,7 +106,7 @@ module.exports = {
   md5hash: function () {
     return new WebpackMd5Hash()
   },
-  done: function (callback, runCommonTask) {
+  done: function (callback, runCommonTask, debug = false) {
     return new DonePlugin(function () {
       if (runCommonTask) {
         if (config.additional) {
@@ -121,8 +121,10 @@ module.exports = {
         if (config.done) {
           config.done(exports, config)
         }
-        // 检测 gem-mine、gem-mine-template、ui 库 是否需要更新
-        detectVerion()
+        if (debug) {
+          // 检测 gem-mine、gem-mine-template、ui 库 是否需要更新
+          detectVerion()
+        }
       }
       if (callback) {
         callback(exports, config)

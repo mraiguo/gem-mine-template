@@ -76,34 +76,36 @@ function checkClassicVersion(context) {
 }
 
 module.exports = function () {
-  const context = getConfig(path.join(ROOT, '.gem-mine'))
-  const prefix = '🚀  '
-  let message = ''
-  const cliMessage = checkCliVersion()
-  if (cliMessage) {
-    message += `${prefix}${cliMessage}`
-  }
-
-  const templateInfo = checkTemplateVersion(context)
-  const uiInfo = checkUIVersion(context)
-  const classicInfo = checkClassicVersion(context)
-  if (templateInfo || uiInfo || classicInfo) {
-    if (cliMessage) {
-      message += '\n\n\n'
-    }
-    if (templateInfo) {
-      message += `${prefix}${templateInfo}\n`
-    }
-    if (uiInfo) {
-      message += `${prefix}${uiInfo}\n`
-    }
-    if (classicInfo) {
-      message += `${prefix}${classicInfo}\n`
-    }
-    message += `建议执行 ${chalk.yellow('gem-mine update')} 进行更新`
-  }
-
   setTimeout(function () {
-    printBox({ text: message })
+    const context = getConfig(path.join(ROOT, '.gem-mine'))
+    const prefix = '🚀  '
+    let message = ''
+    const cliMessage = checkCliVersion()
+    if (cliMessage) {
+      message += `${prefix}${cliMessage}`
+    }
+
+    const templateInfo = checkTemplateVersion(context)
+    const uiInfo = checkUIVersion(context)
+    const classicInfo = checkClassicVersion(context)
+    if (templateInfo || uiInfo || classicInfo) {
+      if (cliMessage) {
+        message += '\n\n\n'
+      }
+      if (templateInfo) {
+        message += `${prefix}${templateInfo}\n`
+      }
+      if (uiInfo) {
+        message += `${prefix}${uiInfo}\n`
+      }
+      if (classicInfo) {
+        message += `${prefix}${classicInfo}\n`
+      }
+      message += `建议执行 ${chalk.yellow('gem-mine update')} 进行更新`
+    }
+
+    if (message) {
+      printBox({ text: message })
+    }
   }, 100)
 }

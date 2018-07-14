@@ -41,7 +41,7 @@ const configPromise = new Promise(function (resolve, reject) {
       helper.plugins.html({ files }, false),
 
       custom.plugins,
-      helper.plugins.done(null, true)
+      helper.plugins.done(null, true, true)
     ),
     stats: {
       children: false,
