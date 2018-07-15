@@ -8,6 +8,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <link rel="shortcut icon" href="<%= htmlWebpackPlugin.options.prefix %>favicon.ico" type="image/x-icon" />
   <link rel="icon" href="<%= htmlWebpackPlugin.options.prefix %>favicon.ico" type="image/x-icon" />
+  <title><%= htmlWebpackPlugin.options.title %></title>
+</head>
+
+<body>
+  <div id="root">
+    <%= require('html-loader!./partial/loading.html') %>
+  </div>
   <% for(var index in htmlWebpackPlugin.files.chunks.main.css) { %>
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>"/>
   <%}%>
@@ -22,12 +29,6 @@
     <script>if (typeof Promise !== 'function') { document.write('<script src="<%= htmlWebpackPlugin.options.prefix %>polyfill-promise.js"><\/script>'); }</script>
     <script src="<%= htmlWebpackPlugin.options.prefix %>vendor.js"></script>
   <% } %>
-  <title><%= htmlWebpackPlugin.options.title %></title>
-</head>
-
-<body>
-  <div id="root"></div>
   <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
 </body>
-
 </html>
