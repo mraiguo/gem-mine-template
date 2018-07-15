@@ -17,7 +17,7 @@
   </div>
   <% for(var index in htmlWebpackPlugin.files.chunks.main.css) { %>
     <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks.main.css[index] %>"/>
-  <%}%>
+  <% } %>
   <% if(htmlWebpackPlugin.options.staticHash) { %>
     <!--[if lte IE 9]><script src="<%= htmlWebpackPlugin.options.prefix %>polyfill-ie8-<%=htmlWebpackPlugin.options.files['polyfill-ie8'].hash%>.js"></script><![endif]-->
     <script>if (typeof Symbol !== 'function' || typeof Set !== 'function') { document.write('<script src="<%= htmlWebpackPlugin.options.prefix %>polyfill-<%=htmlWebpackPlugin.options.files.polyfill.hash%>.js"><\/script>'); }</script>
