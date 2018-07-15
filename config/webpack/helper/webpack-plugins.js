@@ -32,7 +32,7 @@ module.exports = {
     return new webpack.HotModuleReplacementPlugin()
   },
   splitCss: function () {
-    return new CSSSplitWebpackPlugin({size: 4000})
+    return new CSSSplitWebpackPlugin({ size: 4000 })
   },
   html: function (params = {}) {
     const obj = Object.assign(
@@ -97,7 +97,7 @@ module.exports = {
     })
   },
   browser: function (url) {
-    return new OpenBrowserPlugin({url})
+    return new OpenBrowserPlugin({ url })
   },
   extractCss: function () {
     return new ExtractTextPlugin(`[name]${config.staticHash ? '.[contenthash]' : ''}.css`, {
@@ -111,29 +111,32 @@ module.exports = {
   md5hash: function () {
     return new WebpackMd5Hash()
   },
-  done: function (callback, runCommonTask, debug = false) {
-    return new DonePlugin(function () {
-      if (runCommonTask) {
-        if (config.additional) {
-          config.additional.forEach(function (name) {
-            fs.copySync(`${PUBLIC}/${name}`, `${BUILD}/${name}`)
-          })
+  done: (function (runDetectVersion) {
+    return function (callback, runCommonTask, debug = false) {
+      return new DonePlugin(function () {
+        if (runCommonTask) {
+          if (config.additional) {
+            config.additional.forEach(function (name) {
+              fs.copySync(`${PUBLIC}/${name}`, `${BUILD}/${name}`)
+            })
+          }
+          const fav = 'favicon.ico'
+          if (fs.existsSync(path.resolve(PUBLIC, fav))) {
+            fs.copySync(`${PUBLIC}/${fav}`, `${BUILD}/${fav}`)
+          }
+          if (config.done) {
+            config.done(exports, config)
+          }
+          if (debug && runDetectVersion) {
+            runDetectVersion = false
+            // 检测 gem-mine、gem-mine-template、ui 库 是否需要更新
+            detectVerion()
+          }
         }
-        const fav = 'favicon.ico'
-        if (fs.existsSync(path.resolve(PUBLIC, fav))) {
-          fs.copySync(`${PUBLIC}/${fav}`, `${BUILD}/${fav}`)
+        if (callback) {
+          callback(exports, config)
         }
-        if (config.done) {
-          config.done(exports, config)
-        }
-        if (debug) {
-          // 检测 gem-mine、gem-mine-template、ui 库 是否需要更新
-          detectVerion()
-        }
-      }
-      if (callback) {
-        callback(exports, config)
-      }
-    })
-  }
+      })
+    }
+  })(true)
 }
