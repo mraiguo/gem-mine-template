@@ -1,7 +1,6 @@
-const path = require('path')
-const { getConfig, getIP } = require('./util')
+const { getIP } = require('./util')
 
-const proxy = getConfig(path.resolve(__dirname, '../../proxy'))
+const proxy = require('../../proxy')
 const { BUILD } = require('../constant')
 
 module.exports = function (hot, port, params = {}) {
