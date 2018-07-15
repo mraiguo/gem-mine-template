@@ -86,7 +86,7 @@ function checkClassicVersion(context) {
 module.exports = function () {
   setTimeout(function () {
     const context = getConfig(path.join(ROOT, '.gem-mine'))
-    const prefix = '�  '
+    const prefix = '🚀  '
     let message = ''
     const cliMessage = checkCliVersion()
     if (cliMessage) {
