@@ -3,7 +3,9 @@
   "private": true,
   "version": "0.8.7",
   "description": "",
-  "browserslist": ["last 2 versions"],
+  "browserslist": [
+    "last 2 versions"
+  ],
   "dependencies": {
     "cat-eye": "next",
     "react-loadable": "^5.3.1"
@@ -24,7 +26,7 @@
     "chalk": "^2.3.0",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
-7   "detect-port": "^1.2.2",
+    "detect-port": "^1.2.2",
     "eslint": "^4.14.0",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-config-standard-react": "^5.0.0",
