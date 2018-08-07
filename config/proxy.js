@@ -6,6 +6,8 @@
  *    const {example} = request;
  *    example.get/post ...
  *    这里的 example 就是一个包装过的 axios 对象
+ *
+ * 注意：修改此文件需要重新执行 npm start 配置才会生效
  */
 
 const config = {
