@@ -39,7 +39,7 @@ module.exports = function (hot, port, params = {}) {
         pathRewrite: { [`^${prefix}`]: '' },
         onProxyReq: function (proxyReq, req, res) {
           const method = req.method.toUpperCase()
-          log.error(`异常请求 ${method}: http://${req.headers.host}${req.originalUrl} -> ${wds.url}${req.url}`)
+          log.warning(`收到请求 ${method}: http://${req.headers.host}${req.originalUrl} -> ${wds.url}${req.url}`)
           console.log('header: ', JSON.stringify(req.headers))
           anyBody(req, res, function (err, body) {
             if (err) {
